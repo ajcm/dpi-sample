@@ -18,7 +18,7 @@ import lombok.ToString;
  */
 
 @Getter @Setter @ToString
-public class InputEntry {
+public class SubmitEntry {
 
     private String device;
     private String client;

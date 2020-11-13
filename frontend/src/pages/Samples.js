@@ -2,11 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import Title from '../components/Title';
 
-
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import UploadForm from '../samples/UploadForm'
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
@@ -19,6 +15,7 @@ export default function Orders() {
   return (
     <React.Fragment>
       <Title>Samples</Title>
+      <UploadForm/>
     </React.Fragment>
   );
 }

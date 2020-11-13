@@ -5,9 +5,9 @@ import java.util.List;
 public interface IBigDataDao {
 
 
-    SubmitResult submit(List<InputEntry> entries);
+    SubmitResult submit(List<SubmitEntry> entries);
 
-    List<InputEntry> retrieve();
+    List<SubmitEntry> retrieve();
 
 
 }
