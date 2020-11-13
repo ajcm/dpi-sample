@@ -6,3 +6,7 @@ export const postData = async  (url,data) =>{
 }
 
 
+export const get = async  (url) =>{
+  return await axios.get(url)
+}
+

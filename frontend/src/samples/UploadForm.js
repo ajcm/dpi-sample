@@ -1,7 +1,9 @@
 import React,{Fragment,useState} from "react";
 import UploadFile from './UploadFile'
+import Button from '@material-ui/core/Button';
 
 import {postData} from '../remote/RemoteData'
+import SampleTable from './SampleTable'
 
 const UploadForm = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -12,22 +14,21 @@ const UploadForm = () => {
         console.log("Selected file:",file)
 
         if (file){
-            setSelectedFile(file)
+          //  setSelectedFile(file)
+            submitForm(file)
         }
         
     }
 
-    const submitForm = async (e) => {
-        e.preventDefault();
+    const submitForm = async (file) => {
+      //  e.preventDefault();
 
         const formData = new FormData();
      
-        formData.append("file", selectedFile);
+        formData.append("file", file);
 
 
-        if (!selectedFile){
-            alert("No File selected!")
-        }
+
 
         try {
             await postData('http://localhost:8080/samples/upload',formData)
@@ -43,13 +44,10 @@ const UploadForm = () => {
     }
 
   return (  
-    <Fragment>
+    <Fragment>   
+    <SampleTable/>
     <h4>Upload sample</h4>
-      <form>
-      <UploadFile onSelect={onSelect} />
-      <button onClick={submitForm}>Submit</button>
-      </form>
-
+    <UploadFile onSelect={onSelect} />
     </Fragment>
   );
 };

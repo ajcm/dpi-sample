@@ -1,6 +1,5 @@
-import React,{useState,useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,19 +7,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import _ from 'lodash';
+import {get}  from '../remote/RemoteData'
 
 const columns = [
-  { id: 'metadata', label: 'Id', minWidth: 170,
-    format: (value) => (value.id)
-},
-    { id: 'title', label: 'Title', minWidth: 100},
-   
-  { id: 'metadata', label: 'Owner', minWidth: 100,
-    format: (value) => (value.owner) },
+  { id: 'device', label: 'Id', minWidth: 170},
+  { id: 'customer', label: 'Title', minWidth: 100}, 
+  { id: 'office', label: 'Owner', minWidth: 100}
  
 ];
 
@@ -30,6 +24,7 @@ const columns = [
 const useStyles = makeStyles({
   root: {
     width: '100%',
+    marginTop: '10px'
   },
   container: {
     maxHeight: 440,
@@ -42,13 +37,12 @@ const useStyles = makeStyles({
 
 export default function StickyHeadTable() {
   const classes = useStyles();
-  const history = useHistory();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 
-  const [items] = []
+  const items = usePagination()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -60,12 +54,7 @@ export default function StickyHeadTable() {
   };
 
 
-  const goToEdit = (item) => {
 
-    console.log(item)
-    history.push("/content/details/"+item.id);
-
-  }
 
   return (
     <Paper className={classes.root}>
@@ -82,14 +71,12 @@ export default function StickyHeadTable() {
                   {column.label}
                 </TableCell>
               ))}
-               <TableCell>
-                Edit
-               </TableCell>
+             
             </TableRow>
             
           </TableHead>
           <TableBody>
-            {items ? items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {!_.isEmpty(items) ? items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
@@ -100,11 +87,7 @@ export default function StickyHeadTable() {
                       </TableCell>
                     );
                   })}
-
-                    <TableCell>
-                    <EditIcon fontSize='small'  className={classes.icon} onClick={() => goToEdit(row)}/>
-                    <DeleteIcon fontSize='small'  className={classes.icon} onClick={() => {console.log('delete')}}/>
-                   </TableCell>
+                   
                 </TableRow>
               );
             }): ''}
@@ -125,8 +108,11 @@ export default function StickyHeadTable() {
 }
 
 
-const usePagination = (api,service) => {
-  
+const usePagination = () => {
+
+  return get('http://localhost:8080/samples/all')
+
+
 }
 
 
