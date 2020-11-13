@@ -12,8 +12,7 @@ import Template from './components/Template'
 import Home from './pages/Home';
 import Samples from './pages/Samples';
 import About from './pages/About'
-import DPI from './pages/dpi'
-
+import DPI from './pages/Dpi'
 
 
 const App = (props) => {

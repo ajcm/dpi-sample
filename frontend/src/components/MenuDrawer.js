@@ -6,17 +6,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import PeopleIcon from '@material-ui/icons/People';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import DescriptionIcon from '@material-ui/icons/Description';
+import HomeIcon from '@material-ui/icons/Home';
+import InfoIcon from '@material-ui/icons/Info';
 import clsx from 'clsx';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import HomeIcon from '@material-ui/icons/Home';
-import DescriptionIcon from '@material-ui/icons/Description';
-import AssessmentIcon from '@material-ui/icons/Assessment';
-import InfoIcon from '@material-ui/icons/Info';
 
 const drawerWidth = 240;
 

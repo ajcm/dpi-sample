@@ -29,7 +29,7 @@ const UserWelcome = () =>  {
  
   return (
    <React.Fragment>
-      <p>Hello, this is a sample React applicattion.</p>
+      <p>Hello, this is a sample React application.</p>
     </React.Fragment>
   );
 }

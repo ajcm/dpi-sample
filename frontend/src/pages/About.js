@@ -17,8 +17,7 @@ export default function Orders() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Home</Title>
-      <p>Hello, this is a sample React applicattion.</p>
+      <p>Hello, this is a sample React application.</p>
     </React.Fragment>
   );
 }
