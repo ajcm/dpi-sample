@@ -1,8 +1,9 @@
-package com.project.backend.domain;
+package com.project.backend.bigdata;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 
@@ -34,10 +35,22 @@ public class Sample {
 
     private int bsod;
     private int hardReset;
-    private int bootSpeed;
+    private long bootSpeed;
     private long logonDuration;
-    private long cpuUsage;
-    private long memoryUsage;
+    private double cpuUsage;
+    private double memoryUsage;
     private long systemFreeSpace;
+
+    public boolean isValid(){
+        return
+                StringUtils.isNoneBlank(device,client,office) &&
+                        bsod > -1 &&
+                        hardReset > -1 &&
+                        bootSpeed > -1 &&
+                        logonDuration > -1 &&
+                        cpuUsage > -1 &&
+                        memoryUsage > -1 &&
+                        systemFreeSpace > -1;
+    }
 
 }

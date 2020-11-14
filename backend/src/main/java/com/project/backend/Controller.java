@@ -1,8 +1,11 @@
 package com.project.backend;
 
-import com.project.backend.domain.Sample;
-import com.project.backend.parsing.DataParserCSV;
-import com.project.backend.repository.SamplesRepository;
+import com.project.backend.bigdata.SubmitResult;
+import com.project.backend.bigdata.parsing.DataParserCSV;
+import com.project.backend.bigdata.Sample;
+import com.project.backend.bigdata.parsing.SubmitException;
+import com.project.backend.bigdata.repository.SamplesRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +27,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class Controller {
 
     Logger logger = LoggerFactory.getLogger(Controller.class);
 
-//    @Autowired
-//    IBigDataDao bigDataDao;
+    @Autowired
+    DataParserCSV dataParserCSV;
 
     @Autowired
     SamplesRepository samplesRepository;
@@ -50,6 +54,13 @@ public class Controller {
         return new LinkedList<>();
     }
 
+    /** DELETE: TODO Security */
+    @DeleteMapping("/samples/all")
+    public void deleteAll(){
+        samplesRepository.deleteAll();
+    }
+
+
     @GetMapping(path = "/samples/page")
     Page<Sample> findAllPage(
             @PageableDefault(page = 0, size = 20)
@@ -59,38 +70,28 @@ public class Controller {
 
     @PostMapping("/samples/upload")
     @ResponseBody
-    public String  upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<SubmitResult>  upload(@RequestParam("file") MultipartFile file) throws SubmitException {
 
-        if (file.isEmpty()) {
-            return "File is empty";
+        if (file == null || file.isEmpty()) {
+           throw new SubmitException(-1,"No data.");
         }
 
-        try (
-                ByteArrayInputStream stream = new ByteArrayInputStream(file.getBytes());
-                InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-                BufferedReader bufferedReader = new BufferedReader(streamReader);
-        ){
-            List<Sample> entries = DataParserCSV.parse(bufferedReader);
-            /* TODO: Improve performance like executing Batch */
-            samplesRepository.saveAll(entries);
+        SubmitResult result =  dataParserCSV.parseMultipartFile(file);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return "OK";
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
 
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleException(Exception e) {
+    @ExceptionHandler(SubmitException.class)
+    public ResponseEntity<String> handleSubmitException(SubmitException e) {
 
-        logger.error("Error",e);
+        logger.error("SubmitException",e);
 
-        return new ResponseEntity<>("Something bad just happened here. [Todo: improve] ", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Error during upload, line " +  e.getLine()  + " : " +e.getMessage(), HttpStatus.BAD_REQUEST);
 
     }
 
