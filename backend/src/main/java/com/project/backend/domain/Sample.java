@@ -1,8 +1,10 @@
-package com.project.backend.data;
+package com.project.backend.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
 
 /**
  Device_ID
@@ -17,8 +19,14 @@ import lombok.ToString;
  System_Free_Space
  */
 
+@Entity
 @Getter @Setter @ToString
-public class SubmitEntry {
+public class Sample {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
     private String device;
     private String client;

@@ -1,13 +1,11 @@
 package com.project.backend.parsing;
 
-import com.project.backend.data.SubmitEntry;
+import com.project.backend.domain.Sample;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,8 +24,8 @@ import java.util.List;
  */
 public class DataParserCSV {
 
-   public static List<SubmitEntry> parse (BufferedReader br) throws  IOException {
-       List<SubmitEntry> result = new LinkedList<>();
+   public static List<Sample> parse (BufferedReader br) throws  IOException {
+       List<Sample> result = new LinkedList<>();
 
        String line = "";
        int count  = 0 ;
@@ -46,7 +44,7 @@ public class DataParserCSV {
                    throw new IOException("Line:"+ count + " wrong number of fields " );
                }
 
-               SubmitEntry entry = getAsSubmitEntry(elements);
+               Sample entry = getAsSubmitEntry(elements);
 
                result.add(entry);
 
@@ -58,7 +56,7 @@ public class DataParserCSV {
        return result;
    }
 
-    private static SubmitEntry getAsSubmitEntry(String[] elements) {
+    private static Sample getAsSubmitEntry(String[] elements) {
 
 
         String deviceId = StringUtils.trim(elements[0]);
@@ -74,7 +72,7 @@ public class DataParserCSV {
 //        String memoryUsage = elements[0];
 //        String systemFreeSpace= elements[0];
 
-        SubmitEntry entry = new SubmitEntry();
+        Sample entry = new Sample();
         entry.setDevice(deviceId);
         entry.setClient(clientId);
         entry.setOffice(officeId);
