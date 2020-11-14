@@ -1,6 +1,6 @@
 package com.project.backend.bigdata.parsing;
 
-import com.project.backend.bigdata.Sample;
+import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.SubmitResult;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import lombok.extern.slf4j.Slf4j;

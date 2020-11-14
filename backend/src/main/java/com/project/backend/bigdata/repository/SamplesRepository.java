@@ -1,6 +1,6 @@
 package com.project.backend.bigdata.repository;
 
-import com.project.backend.bigdata.Sample;
+import com.project.backend.bigdata.domain.Sample;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -67,8 +67,43 @@ public interface SamplesRepository extends CrudRepository<Sample, Long> {
     double  minMemoryUsage();
 
 
+    /** This just gets the max from all the current samples
+     *
+     * @param device
+     * @return
+     */
+     default Sample getHistoryMaxValues(String device){
+        Sample sample = new Sample();
 
+        sample.setBsod(maxBsod());
+        sample.setHardReset(maxHardReset());
+        sample.setBootSpeed(maxBootSpeed());
+        sample.setLogonDuration(maxLogonDuration());
+        sample.setCpuUsage(maxCpuUsage());
+        sample.setMemoryUsage(maxMemoryUsage());
+        sample.setSystemFreeSpace(maxSystemFreeSpace());
 
+        return sample;
+    }
+
+    /** This just gets the max from all the current samples
+     *
+     * @param device
+     * @return
+     */
+    default Sample getHistoryMinValues(String device){
+        Sample sample = new Sample();
+
+        sample.setBsod(minBsod());
+        sample.setHardReset(minHardReset());
+        sample.setBootSpeed(minBootSpeed());
+        sample.setLogonDuration(minLogonDuration());
+        sample.setCpuUsage(minCpuUsage());
+        sample.setMemoryUsage(minMemoryUsage());
+        sample.setSystemFreeSpace(minSystemFreeSpace());
+
+        return sample;
+    }
 
 
 

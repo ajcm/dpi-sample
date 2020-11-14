@@ -1,12 +1,13 @@
 package com.project.backend;
 
-import com.project.backend.bigdata.Sample;
+import com.project.backend.bigdata.DeviceDpiProcessor;
 import com.project.backend.bigdata.SubmitResult;
+import com.project.backend.bigdata.domain.DeviceDpi;
+import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.parsing.DataParserCSV;
+import com.project.backend.bigdata.repository.DeviceDpiRepository;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,8 +15,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Iterator;
 
 
 @Component @Slf4j
@@ -25,7 +28,9 @@ public class AppStartupRunner implements ApplicationRunner {
     DataParserCSV dataParserCSV;
 
     @Autowired
-    SamplesRepository samplesRepository;
+    DeviceDpiProcessor deviceDpiProcessor;
+
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -34,14 +39,24 @@ public class AppStartupRunner implements ApplicationRunner {
 
         Resource entries = new ClassPathResource("device_performance_index.csv");
 
-        log.debug("file size: " +    entries.contentLength());
+        log.debug("file size: " + entries.contentLength());
 
-        try (InputStream stream = entries.getInputStream()){
+        try (InputStream stream = entries.getInputStream()) {
             SubmitResult result = dataParserCSV.parse(stream);
-            log.debug("Loaded Data " + result + " items." );
-        }catch (Exception ex){
-            log.info("Startup populating data",ex);
+            log.debug("Loaded Data " + result + " items.");
+            deviceDpiProcessor.processDPI();
+            log.debug("Processed" + result + " items.");
+
+        } catch (Exception ex) {
+            log.info("Startup populating data", ex);
         }
+
+
+    }
+
+    public void test(){
+/*
+
 
 
         int maxBsod = samplesRepository.maxBsod();
@@ -68,13 +83,12 @@ public class AppStartupRunner implements ApplicationRunner {
         System.out.println("memoryUsage:" + minMemoryUsage + " - " + maxMemoryUsage);
         System.out.println("systemFreeSpace:" + minSystemFreeSpace + " - " + maxSystemFreeSpace);
 
-        Iterable<Sample> iter = samplesRepository.findAll();
+        Iterable<Sample> iterable = samplesRepository.findAll();
+        Iterator<Sample> iterator = iterable.iterator();
 
-        for (int i = 0; i < 10 && iter.iterator().hasNext();i++) {
+        for (int i = 0;iterator.hasNext();i++) {
 
-            Sample sample = iter.iterator().next();
-
-            System.out.println("Parse " + i + " " + sample);
+            Sample sample = iterator.next();
 
             int value = sample.getBsod();
             int max = maxBsod;
@@ -84,8 +98,26 @@ public class AppStartupRunner implements ApplicationRunner {
 
             System.out.println("Parse " + i + " " + sample);
             System.out.println("dpi " + dpi);
+
+            DeviceDpi device = new DeviceDpi();
+
+            device.setClient(sample.getClient());
+            device.setOffice(sample.getOffice());
+            device.setDevice(sample.getDevice());
+
+            device.setBsod(BigDecimal.valueOf(dpi));
+            device.setDpi(BigDecimal.valueOf(dpi));
+
+            deviceDpiRepository.save(device);
         }
 
-
+*/
     }
+
+
+
+
+
+
+
 }

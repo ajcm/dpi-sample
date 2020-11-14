@@ -2,7 +2,7 @@ import React,{Fragment,useState} from "react";
 import UploadFile from './UploadFile'
 import Button from '@material-ui/core/Button';
 
-import {postData} from '../remote/RemoteData'
+import {doPost} from '../remote/RemoteData'
 import SampleTable from './SampleTable'
 
 const UploadForm = () => {
@@ -18,7 +18,7 @@ const UploadForm = () => {
         formData.append("file", file);
 
         try {
-            const result  = await postData('http://localhost:8080/samples/upload',formData)
+            const result  = await doPost('samples/upload',formData)
             const total  = result.data.parsed
             alert('Loaded ' +total  + ' items' )
         }catch (error){ 

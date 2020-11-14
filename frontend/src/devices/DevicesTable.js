@@ -14,20 +14,20 @@ import _ from 'lodash';
 
 import {usePagination,doDelete} from '../remote/RemoteData'
 
+
 const columns = [
   { id: 'device', label: 'Device', minWidth: 100},
-  { id: 'client', label: 'Client', minWidth: 100}, 
-  { id: 'office', label: 'Office', minWidth: 100},
+  { id: 'dpi', label: 'DPI', minWidth: 100},
+
   { id: 'bsod', label: 'BSOD Count', minWidth: 100},
-  { id: 'hardReset', label: 'HR Count', minWidth: 100},
+  { id: 'hardResets', label: 'HR Count', minWidth: 100},
   { id: 'bootSpeed', label: 'Boot Speed', minWidth: 100},
   { id: 'logonDuration', label: 'Logon Duration', minWidth: 100},
   { id: 'cpuUsage', label: 'CPU', minWidth: 100},
   { id: 'memoryUsage', label: 'Memory', minWidth: 100},
   { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100},
-  
 
- 
+   
 ];
 
 
@@ -58,7 +58,7 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 
-  const [items,total,load] = usePagination('samples/page',page,rowsPerPage)
+  const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -77,12 +77,6 @@ export default function StickyHeadTable() {
     load(0,rowsPerPage)
   };
 
-  const clearAllRecords = async () => {
-
-    await deleteAllRecords()
-
-    load(0,rowsPerPage)
-  };
 
 
 
@@ -138,13 +132,9 @@ export default function StickyHeadTable() {
       />
       <Paper   elevation={0}  className={classes.paper} >
        <Button variant="outlined" color="primary" component="span"  onClick={reload}>    Refresh     </Button>
-       <Button variant="outlined" color="primary" component="span"  onClick={clearAllRecords} style={{marginLeft:'5px'}}>    Clear All     </Button>
+       <Button variant="outlined" color="primary" component="span"  style={{marginLeft:'5px'}}>    Process DPI    </Button>
        </Paper>
     </Paper>
   );
 }
 
-
-const deleteAllRecords = async () => {
-   await doDelete('samples/all')
-}
