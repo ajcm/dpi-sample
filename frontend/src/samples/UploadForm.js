@@ -6,41 +6,25 @@ import {postData} from '../remote/RemoteData'
 import SampleTable from './SampleTable'
 
 const UploadForm = () => {
-    const [selectedFile, setSelectedFile] = useState(null);
-
 
     const onSelect = (file) => {
-
-        console.log("Selected file:",file)
-
         if (file){
-          //  setSelectedFile(file)
             submitForm(file)
-        }
-        
+        }        
     }
 
-    const submitForm = async (file) => {
-      //  e.preventDefault();
-
+    const submitForm = async (file) => {      
         const formData = new FormData();
-     
         formData.append("file", file);
 
-
-
-
         try {
-            await postData('http://localhost:8080/samples/upload',formData)
-            alert('OK')
-        
+            const result  = await postData('http://localhost:8080/samples/upload',formData)
+            const total  = result.data.parsed
+            alert('Loaded ' +total  + ' items' )
         }catch (error){ 
             console.log("error",error)
-            alert('Error sending data: '+error)
+            alert('Error: '+error.response.data)
         }
-        
-
-    
     }
 
   return (  
