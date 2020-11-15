@@ -15,11 +15,6 @@ export const doDelete = async  (url) =>{
 }
 
 
-// const deleteAllRecords = async () => {
-//   await axios.delete('http://localhost:8080/samples/all')
-// }
-
-
 
 
 export const usePagination = (url,page,size) => {
@@ -28,10 +23,7 @@ export const usePagination = (url,page,size) => {
   const [total, setTotal] = React.useState(0);
 
   useEffect(() => {
-
-    console.log('load',page,size)
-
-    load()
+    load(page,size)
   },[])
 
 

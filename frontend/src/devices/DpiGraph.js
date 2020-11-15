@@ -18,17 +18,23 @@ const options = {
 
 const VerticalBar = forwardRef((props, ref) => {
 
+  const [showGraph, setShowGraph] = React.useState(false);
   const [data, setData] = React.useState();
 
   useImperativeHandle(ref, () => {
     return {
-      updateData: (data) =>   setData(data)
+      updateData: (data) =>   setData(data),
+      setShowGraph: (show) =>   setShowGraph(show),
+
   }});
 
 
   return (
     <>
+    { showGraph ? 
       <Bar data={data} options={options} />
+      : ''
+    }
     </>
   )
 })

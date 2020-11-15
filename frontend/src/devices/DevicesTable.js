@@ -83,8 +83,9 @@ export default function StickyHeadTable() {
 
   const toogleGraph = () => {
     setShowGraph(!showGraph)
+    childRef.current.setShowGraph(!showGraph)
 
-    if (showGraph){
+    if (!showGraph){
       updateGraph()
     }
 
@@ -111,14 +112,12 @@ export default function StickyHeadTable() {
 
     const label = 'DPI'
     const borderWidth = 1
-    const backgroundColor =     'rgba(255, 99, 99, 150)'
+    const backgroundColor =  'rgba(255, 99, 99, 150)'
 
     response.labels = labels
     response.datasets = [{label,data,borderWidth,backgroundColor}]
 
-    console.log(response)
     return response
-
   }
 
   const updateGraph = () => {
@@ -176,8 +175,6 @@ export default function StickyHeadTable() {
       />
       <Paper   elevation={0}  className={classes.paper} >
         <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Refresh     </Button>
-        <Button variant="outlined" color="primary" component="span"  style={{marginLeft:'5px'}}>    Process DPI    </Button>
-
         { showGraph ? 
           <Fragment>
           <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
@@ -187,14 +184,12 @@ export default function StickyHeadTable() {
          <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
         }
        </Paper>
-     
-      
-      { showGraph ? 
+         
+    
       <Paper  elevation={0}  className={classes.paper2}>
        <DpiGraph  ref={childRef} />
       </Paper>
-      : '' }
-
+  
     </Paper>
     
   );
