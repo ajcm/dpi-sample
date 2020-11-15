@@ -51,14 +51,15 @@ const useStyles = makeStyles({
   }
 });
 
+
 export default function StickyHeadTable() {
   const classes = useStyles();
+
+  const childRef = useRef();
 
   const [showGraph, setShowGraph] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-
   const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
 
   const handleChangePage = (event, newPage) => {
@@ -67,6 +68,8 @@ export default function StickyHeadTable() {
   };
 
   const handleChangeRowsPerPage = (event) => {
+
+    console.log('handleChangeRowsPerPage',event.target.value)
     setRowsPerPage(+event.target.value);
     setPage(0);
     load(0,+event.target.value)
@@ -80,9 +83,47 @@ export default function StickyHeadTable() {
 
   const toogleGraph = () => {
     setShowGraph(!showGraph)
+
+    if (showGraph){
+      updateGraph()
+    }
+
   };
 
-  
+  const getGraphData = () => {
+
+    if (_.isEmpty(items)){
+      return {}
+    }
+
+    const labels =  items.reduce((acc,item) => {
+      acc.push(item.device)
+      return acc
+    },[])
+
+    const data =  items.reduce((acc,item) => {
+      acc.push(item.dpi)
+      return acc
+    },[])
+
+
+    var response = {}
+
+    const label = 'DPI'
+    const borderWidth = 1
+    const backgroundColor =     'rgba(255, 99, 99, 150)'
+
+    response.labels = labels
+    response.datasets = [{label,data,borderWidth,backgroundColor}]
+
+    console.log(response)
+    return response
+
+  }
+
+  const updateGraph = () => {
+    childRef.current.updateData(getGraphData())
+  }
 
 
 
@@ -140,7 +181,7 @@ export default function StickyHeadTable() {
         { showGraph ? 
           <Fragment>
           <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
-          <Button variant="contained" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}> Update Graph </Button>
+          <Button variant="contained" color="primary" component="span"  onClick={updateGraph} style={{marginLeft:'5px'}}> Update Graph </Button>
           </Fragment>
         :
          <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
@@ -150,7 +191,7 @@ export default function StickyHeadTable() {
       
       { showGraph ? 
       <Paper  elevation={0}  className={classes.paper2}>
-       <DpiGraph  />
+       <DpiGraph  ref={childRef} />
       </Paper>
       : '' }
 

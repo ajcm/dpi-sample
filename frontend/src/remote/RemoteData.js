@@ -35,7 +35,7 @@ export const usePagination = (url,page,size) => {
   },[])
 
 
-  const load = async () => {
+  const load = async (page,size) => {
     try {
       const params = {page,size}
       const response = await axios.get(SERVER +url,{params})
