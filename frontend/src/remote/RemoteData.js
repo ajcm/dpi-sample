@@ -25,7 +25,7 @@ export const doDelete = async  (url) =>{
 export const usePagination = (url,page,size) => {
 
   const [items, setItems] = React.useState([]);
-  const [total, setTotal] = React.useState([]);
+  const [total, setTotal] = React.useState(0);
 
   useEffect(() => {
 

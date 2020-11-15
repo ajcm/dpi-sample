@@ -9,8 +9,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import React,{useEffect} from 'react';
+import React,{useEffect,useRef,Fragment} from 'react';
 import _ from 'lodash';
+import DpiGraph from '../devices/DpiGraph'
 
 import {usePagination,doDelete} from '../remote/RemoteData'
 
@@ -18,19 +19,14 @@ import {usePagination,doDelete} from '../remote/RemoteData'
 const columns = [
   { id: 'device', label: 'Device', minWidth: 100},
   { id: 'dpi', label: 'DPI', minWidth: 100},
-
   { id: 'bsod', label: 'BSOD Count', minWidth: 100},
   { id: 'hardResets', label: 'HR Count', minWidth: 100},
   { id: 'bootSpeed', label: 'Boot Speed', minWidth: 100},
   { id: 'logonDuration', label: 'Logon Duration', minWidth: 100},
   { id: 'cpuUsage', label: 'CPU', minWidth: 100},
   { id: 'memoryUsage', label: 'Memory', minWidth: 100},
-  { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100},
-
-   
+  { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100},   
 ];
-
-
 
 
 const useStyles = makeStyles({
@@ -41,6 +37,10 @@ const useStyles = makeStyles({
   paper: {
  
     margin: '5px'
+  },
+  paper2: {
+    margin: '5px',
+    marginTop: '10px'
   },
   container: {
     maxHeight: 440,
@@ -54,6 +54,7 @@ const useStyles = makeStyles({
 export default function StickyHeadTable() {
   const classes = useStyles();
 
+  const [showGraph, setShowGraph] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -77,16 +78,18 @@ export default function StickyHeadTable() {
     load(0,rowsPerPage)
   };
 
+  const toogleGraph = () => {
+    setShowGraph(!showGraph)
+  };
 
+  
 
-
-  console.log('items',items)
 
 
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
-        <Table  size="small" stickyHeader aria-label="sticky table">
+        <Table  size="small" stickyHeader aria-label="table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -105,7 +108,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {!_.isEmpty(items) ? items.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow key={row.id} hover role="checkbox" tabIndex={-1} >
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -131,10 +134,28 @@ export default function StickyHeadTable() {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Paper   elevation={0}  className={classes.paper} >
-       <Button variant="outlined" color="primary" component="span"  onClick={reload}>    Refresh     </Button>
-       <Button variant="outlined" color="primary" component="span"  style={{marginLeft:'5px'}}>    Process DPI    </Button>
+        <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Refresh     </Button>
+        <Button variant="outlined" color="primary" component="span"  style={{marginLeft:'5px'}}>    Process DPI    </Button>
+
+        { showGraph ? 
+          <Fragment>
+          <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
+          <Button variant="contained" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}> Update Graph </Button>
+          </Fragment>
+        :
+         <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
+        }
        </Paper>
+     
+      
+      { showGraph ? 
+      <Paper  elevation={0}  className={classes.paper2}>
+       <DpiGraph  />
+      </Paper>
+      : '' }
+
     </Paper>
+    
   );
 }
 
