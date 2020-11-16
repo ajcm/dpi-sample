@@ -12,20 +12,17 @@ import TableRow from '@material-ui/core/TableRow';
 import React,{useEffect,useRef,Fragment} from 'react';
 import _ from 'lodash';
 import DpiGraph from '../devices/DpiGraph'
+import TableFilter from './TableFilter'
 
 import {usePagination,doDelete} from '../remote/RemoteData'
 
 
-const columns = [
+const columns = [ 
+  { id: 'client', label: 'Client', minWidth: 100}, 
+  { id: 'office', label: 'Office', minWidth: 100},
   { id: 'device', label: 'Device', minWidth: 100},
   { id: 'dpi', label: 'DPI', minWidth: 100},
-  { id: 'bsod', label: 'BSOD Count', minWidth: 100},
-  { id: 'hardResets', label: 'HR Count', minWidth: 100},
-  { id: 'bootSpeed', label: 'Boot Speed', minWidth: 100},
-  { id: 'logonDuration', label: 'Logon Duration', minWidth: 100},
-  { id: 'cpuUsage', label: 'CPU', minWidth: 100},
-  { id: 'memoryUsage', label: 'Memory', minWidth: 100},
-  { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100},   
+ 
 ];
 
 
@@ -48,6 +45,12 @@ const useStyles = makeStyles({
   icon : {
     width: 25,
     height: 25,  
+  },
+  table: {
+    "& th": {
+      fontWeight: 'bold',
+      backgroundColor: 'silver'
+    }
   }
 });
 
@@ -126,42 +129,70 @@ export default function StickyHeadTable() {
 
 
 
+  const DeviceTableHead = ()=> ( 
+    <TableHead>
+      <TableRow>
+        {columns.map((column) => (
+          <TableCell
+            key={column.id}
+            align={column.align}
+            style={{ minWidth: column.minWidth }}
+          >
+            {column.label}
+          </TableCell>
+        ))}
+      
+      </TableRow>
+    </TableHead>)
+
+  const DeviceTableBody = ()=> ( 
+    <TableBody>
+              {!_.isEmpty(items) ? items.map((row) => {
+                return (
+                  <TableRow key={row.id} hover role="checkbox" tabIndex={-1} >
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && value? column.format(value) : value}
+                        </TableCell>
+                      );
+                    })}
+                    
+                  </TableRow>
+                );
+              }): ''}
+    </TableBody>
+  )
+
+  const FormControls = () =>(
+    <Paper   elevation={0}  className={classes.paper} >
+          <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Refresh     </Button>
+          { showGraph ? 
+            <Fragment>
+            <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
+            <Button variant="contained" color="primary" component="span"  onClick={updateGraph} style={{marginLeft:'5px'}}> Update Graph </Button>
+            </Fragment>
+          :
+          <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
+          }
+    </Paper>
+  )
+
+const FormFilters = () =>(
+    <Paper   elevation={0}  className={classes.paper} >
+      <TableFilter/>     
+    </Paper>
+  )
+
+
   return (
     <Paper className={classes.root}>
+      <FormFilters/>
       <TableContainer className={classes.container}>
-        <Table  size="small" stickyHeader aria-label="table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-             
-            </TableRow>
-            
-          </TableHead>
-          <TableBody>
-            {!_.isEmpty(items) ? items.map((row) => {
-              return (
-                <TableRow key={row.id} hover role="checkbox" tabIndex={-1} >
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && value? column.format(value) : value}
-                      </TableCell>
-                    );
-                  })}
-                   
-                </TableRow>
-              );
-            }): ''}
-          </TableBody>
+        <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
+          <DeviceTableHead/>
+          <DeviceTableBody />      
         </Table>
       </TableContainer>
       <TablePagination
@@ -173,19 +204,9 @@ export default function StickyHeadTable() {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Paper   elevation={0}  className={classes.paper} >
-        <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Refresh     </Button>
-        { showGraph ? 
-          <Fragment>
-          <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
-          <Button variant="contained" color="primary" component="span"  onClick={updateGraph} style={{marginLeft:'5px'}}> Update Graph </Button>
-          </Fragment>
-        :
-         <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
-        }
-       </Paper>
-         
-    
+
+      <FormControls/>
+
       <Paper  elevation={0}  className={classes.paper2}>
        <DpiGraph  ref={childRef} />
       </Paper>
