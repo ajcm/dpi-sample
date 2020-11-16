@@ -20,23 +20,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleSelect() {
+export default function SimpleSelect({onUpdate}) {
   const classes = useStyles();
   const [client, setClient] = React.useState('-1');
   const [office, setOffice] = React.useState('-1');
 
+  const [offices, setOffices] = React.useState([]);
   const [clients] = useGetClients('business/clients')
 
   const handleClientChange = (event) => {
+
+    var client = event.target.value;
     setClient(event.target.value);
+
+    if (client != '-1'){
+      loadOffices(client)
+    }
+   // onUpdate(client)
+  };
+
+  const handleOfficeChange = (event) => {
+
+    var office = event.target.value;
+    setOffice(event.target.value);
+
+    onUpdate({office})
+
+    //onUpdate({client})
   };
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log("Client changed to ",client )
+  //   console.log("Client changed to ",client )
+  //   loadOffices(client)
    
-  },[client])
+  // },[client])
+
+
+  const loadOffices = async (clientId) =>{
+
+    const response = await axios.get(SERVER +'business/offices/'+clientId)      
+    console.log(response)
+
+    if (response && response.data ){
+      setOffices(response.data)    
+    }else{
+      setOffices([])    
+    }
+
+  }
 
   
 
@@ -49,7 +82,7 @@ export default function SimpleSelect() {
           id="demo-simple-select"
           value={client}
           onChange={handleClientChange}>
-             <MenuItem value="-1">
+          <MenuItem value="-1">
             <em>ALL</em>
           </MenuItem>
           { !_.isEmpty(clients) ? 
@@ -60,7 +93,19 @@ export default function SimpleSelect() {
       </FormControl>
       <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Office</InputLabel>
-        
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={office}
+          onChange={handleOfficeChange}>
+      <MenuItem value="-1">
+            <em>ALL</em>
+          </MenuItem>
+          { !_.isEmpty(offices) ? 
+              offices.map(c => <MenuItem key={c.officeId}value={c.officeId}>{c.name}</MenuItem>)
+            : ''
+            }
+       </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
         <DpiSlider/>
@@ -105,3 +150,4 @@ export const useGetClients = (url) => {
 
   return [items]
 }
+

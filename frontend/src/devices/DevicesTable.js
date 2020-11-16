@@ -65,7 +65,7 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
 
-  const {filter,setFilter,client,setClient} = React.useContext(FormContext);
+  const [filter, setFilter] = React.useState({});
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -87,8 +87,20 @@ export default function StickyHeadTable() {
     load(0,rowsPerPage)
     */
 
-    console.log('filter',client)
+
   };
+
+  const onUpdate = (e) => {
+    /* 
+    setPage(0);
+    load(0,rowsPerPage)
+    */
+
+   setFilter({e})
+
+    console.log(' new filter',filter)
+  };
+
 
   const toogleGraph = () => {
     setShowGraph(!showGraph)
@@ -185,16 +197,16 @@ export default function StickyHeadTable() {
     </Paper>
   )
 
-const FormFilters = () =>(
+const FormFilters = ({onUpdate}) =>(
     <Paper   elevation={0}  className={classes.paper} >
-      <TableFilter/>     
+      <TableFilter onUpdate={onUpdate}/>     
     </Paper>
   )
 
 
   return (
     <Paper className={classes.root}>
-      <FormFilters/>
+      <FormFilters onUpdate={onUpdate} />
       <TableContainer className={classes.container}>
         <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
           <DeviceTableHead/>
