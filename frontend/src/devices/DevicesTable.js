@@ -15,7 +15,7 @@ import DpiGraph from '../devices/DpiGraph'
 import TableFilter from './TableFilter'
 
 import {usePagination,doDelete} from '../remote/RemoteData'
-
+import { FormContext } from '../context/FormContext';
 
 const columns = [ 
   { id: 'client', label: 'Client', minWidth: 100}, 
@@ -65,6 +65,8 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
 
+  const {filter,setFilter,client,setClient} = React.useContext(FormContext);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     load(newPage,rowsPerPage)
@@ -79,9 +81,13 @@ export default function StickyHeadTable() {
   };
 
 
-  const reload = (event, newPage) => {
+  const reload = () => {
+    /* 
     setPage(0);
     load(0,rowsPerPage)
+    */
+
+    console.log('filter',client)
   };
 
   const toogleGraph = () => {
@@ -167,7 +173,7 @@ export default function StickyHeadTable() {
 
   const FormControls = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-          <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Refresh     </Button>
+          <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Update     </Button>
           { showGraph ? 
             <Fragment>
             <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>

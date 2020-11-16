@@ -31,9 +31,14 @@ export default function SimpleSelect() {
     setClient(event.target.value);
   };
 
-  const handleOfficeChange = (event) => {
-    setClient(event.target.value);
-  };
+
+  useEffect(() => {
+
+    console.log("Client changed to ",client )
+   
+  },[client])
+
+  
 
   return (
     <div>
@@ -48,23 +53,14 @@ export default function SimpleSelect() {
             <em>ALL</em>
           </MenuItem>
           { !_.isEmpty(clients) ? 
-            clients.map(c => <MenuItem key={c.clientId} value={c.clientId}>{c.clientId} - {c.name} </MenuItem>)
+            clients.map(c => <MenuItem key={c.clientId}value={c.clientId}>{c.name}</MenuItem>)
           : ''
           }
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Office</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={office}
-          onChange={handleOfficeChange}>
-             <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
         
-        </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
         <DpiSlider/>
