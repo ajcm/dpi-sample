@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class BusinessService {
 
-    private static String[] CLIENTS = {"WHATEVER","IBM","ONU","VOLVO","HSBC","HP","Compaq","CGD","AIB","BOI","LaCaixa","BMW","ROLEX","VATICAN","NATO","AIRBUS","BOEING","WALLMART"};
+    private static String[] CLIENTS = {"WHATEVER","IBM","ONU","VOLVO","HSBC","HP","Compaq","CGD","AIB","XEROX","LaCaixa","BMW","ROLEX","VATICAN","NATO","AIRBUS","BOEING","WALLMART"};
 
     @Autowired
     DeviceDpiRepository deviceDpiRepository;
@@ -41,7 +41,7 @@ public class BusinessService {
         List<String> offices = deviceDpiRepository.findOffices(clientId);
 
         if (!CollectionUtils.isEmpty(offices)) {
-            result = offices.stream().map(o -> new Office(clientId,o,"L"+0)).collect(Collectors.toList());
+            result = offices.stream().map(o -> new Office(clientId,o,"L"+o)).collect(Collectors.toList());
         }
 
         return result;

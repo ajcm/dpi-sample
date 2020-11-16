@@ -17,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Dpi() {
   const classes = useStyles();
 
-  const [filter, setFilter] = React.useState({});
-  const [client, setClient] = React.useState('-1');
+  const [filter, setFilter] = React.useState({'client':'-1'});
+  //const [client, setClient] = React.useState('-1');
 
 
   return (
     <React.Fragment>
       <Title>DPI</Title>
-      <FormContext.Provider value={{filter,setFilter,client, setClient}}>
+      <FormContext.Provider value={{filter,setFilter}}>
       <DeviceTable/>
       </FormContext.Provider>
 

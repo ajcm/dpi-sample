@@ -65,7 +65,15 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
 
-  const [filter, setFilter] = React.useState({});
+  const {filter, setFilter} = React.useContext(FormContext);
+
+   useEffect(() => {
+
+    console.log("*** filter ***  ",filter )
+
+
+   
+  },[filter])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -91,12 +99,12 @@ export default function StickyHeadTable() {
   };
 
   const onUpdate = (e) => {
-    /* 
+     
     setPage(0);
-    load(0,rowsPerPage)
-    */
+    load(0,rowsPerPage,filter)
+    
 
-   setFilter({e})
+    setFilter({e})
 
     console.log(' new filter',filter)
   };

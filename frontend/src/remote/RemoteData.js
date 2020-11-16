@@ -23,11 +23,11 @@ export const usePagination = (url,page,size) => {
   const [total, setTotal] = React.useState(0);
 
   useEffect(() => {
-    load(page,size)
+    load(page,size,{})
   },[])
 
 
-  const load = async (page,size) => {
+  const load = async (page,size,filter) => {
     try {
       const params = {page,size}
       const response = await axios.get(SERVER +url,{params})

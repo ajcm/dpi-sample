@@ -1,5 +1,6 @@
 package com.project.backend.bigdata.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
  System_Free_Space
  */
 
+@Data
 @Entity
 @Getter
 @Setter

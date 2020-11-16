@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import DpiSlider from './DpiSlider'
 import axios from 'axios';
 import _ from 'lodash';
+import { FormContext } from '../context/FormContext';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -22,40 +23,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleSelect({onUpdate}) {
   const classes = useStyles();
-  const [client, setClient] = React.useState('-1');
-  const [office, setOffice] = React.useState('-1');
+  //const [filter, setFilter] = React.useState({'client':'-1'});
+  const {filter, setFilter} = React.useContext(FormContext);
 
-  const [offices, setOffices] = React.useState([]);
-  const [clients] = useGetClients('business/clients')
+  //const [clients, setClients] = React.useState([]);
+
+  var [clients] = useGetClients()
 
   const handleClientChange = (event) => {
 
     var client = event.target.value;
-    setClient(event.target.value);
 
-    if (client != '-1'){
-      loadOffices(client)
-    }
+    setFilter({...filter,client});
+
+    // if (client != '-1'){
+    //   loadOffices(client)
+    // }
    // onUpdate(client)
   };
 
   const handleOfficeChange = (event) => {
 
-    var office = event.target.value;
-    setOffice(event.target.value);
-
-    onUpdate({office})
-
-    //onUpdate({client})
   };
 
 
   // useEffect(() => {
 
-  //   console.log("Client changed to ",client )
-  //   loadOffices(client)
+  //   console.log("filter  ",filter )
+
+  //   var clients = [{"clientId": "2","name":"FFFF"}]
+
+  //   setClients(clients);
+
    
-  // },[client])
+  // },[])
 
 
   const loadOffices = async (clientId) =>{
@@ -63,12 +64,7 @@ export default function SimpleSelect({onUpdate}) {
     const response = await axios.get(SERVER +'business/offices/'+clientId)      
     console.log(response)
 
-    if (response && response.data ){
-      setOffices(response.data)    
-    }else{
-      setOffices([])    
-    }
-
+   
   }
 
   
@@ -80,50 +76,31 @@ export default function SimpleSelect({onUpdate}) {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={client}
+          value= { !_.isEmpty(clients) && filter && filter.client ? filter.client : '-1'}
           onChange={handleClientChange}>
           <MenuItem value="-1">
             <em>ALL</em>
           </MenuItem>
           { !_.isEmpty(clients) ? 
-            clients.map(c => <MenuItem key={c.clientId}value={c.clientId}>{c.name}</MenuItem>)
+            clients.map(c => c && c.clientId ?  <MenuItem key={c.clientId} value={c.clientId}>{c.clientId}</MenuItem> : '')
           : ''
           }
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Office</InputLabel>
-      <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={office}
-          onChange={handleOfficeChange}>
-      <MenuItem value="-1">
-            <em>ALL</em>
-          </MenuItem>
-          { !_.isEmpty(offices) ? 
-              offices.map(c => <MenuItem key={c.officeId}value={c.officeId}>{c.name}</MenuItem>)
-            : ''
-            }
-       </Select>
+     
       </FormControl>
       <FormControl className={classes.formControl}>
         <DpiSlider/>
       </FormControl>
-
-    <div>
-    <Button  variant="contained"   color="primary"  component="span"  style={{marginBottom:'15px'}}> Update
-     </Button>
-    </div>
-
-
     </div>
   );
 }
 
-const SERVER = 'http://localhost:8080/'
+const SERVER = 'http://localhost:8080/' + 'business/clients'
 
-export const useGetClients = (url) => {
+export const useGetClients = () => {
   const [items, setItems] = React.useState([]);
   
   useEffect(() => {
@@ -133,7 +110,7 @@ export const useGetClients = (url) => {
   const load = async () => {
     try {
 
-      const response = await axios.get(SERVER +url)      
+      const response = await axios.get(SERVER )      
       console.log(response)
 
       if (response && response.data ){

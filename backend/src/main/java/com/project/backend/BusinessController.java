@@ -19,11 +19,8 @@ import java.util.List;
 @Slf4j
 public class BusinessController {
 
-
-
     @Autowired
     BusinessService businessService;
-
 
     @GetMapping("/clients")
     public List<Client> getAll(){
@@ -34,8 +31,6 @@ public class BusinessController {
     public List<Office> getOffices(@PathVariable String clientId){
         return businessService.getOffices(clientId);
     }
-
-
 
 
 }
