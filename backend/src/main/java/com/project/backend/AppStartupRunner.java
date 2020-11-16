@@ -1,12 +1,8 @@
 package com.project.backend;
 
-import com.project.backend.bigdata.DeviceDpiProcessor;
+import com.project.backend.bigdata.DeviceDpiService;
 import com.project.backend.bigdata.SubmitResult;
-import com.project.backend.bigdata.domain.DeviceDpi;
-import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.parsing.DataParserCSV;
-import com.project.backend.bigdata.repository.DeviceDpiRepository;
-import com.project.backend.bigdata.repository.SamplesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -16,9 +12,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Iterator;
 
 
 @Component @Slf4j
@@ -28,7 +21,7 @@ public class AppStartupRunner implements ApplicationRunner {
     DataParserCSV dataParserCSV;
 
     @Autowired
-    DeviceDpiProcessor deviceDpiProcessor;
+    DeviceDpiService deviceDpiService;
 
 
 
@@ -44,7 +37,7 @@ public class AppStartupRunner implements ApplicationRunner {
         try (InputStream stream = entries.getInputStream()) {
             SubmitResult result = dataParserCSV.parse(stream);
             log.debug("Loaded Data " + result + " items.");
-            deviceDpiProcessor.processDPI();
+            deviceDpiService.processDPI();
             log.debug("Processed" + result + " items.");
 
         } catch (Exception ex) {

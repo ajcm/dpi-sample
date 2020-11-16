@@ -1,8 +1,7 @@
 package com.project.backend;
 
-import com.project.backend.bigdata.DeviceDpiProcessor;
+import com.project.backend.bigdata.DeviceDpiService;
 import com.project.backend.bigdata.domain.DeviceDpi;
-import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.repository.DeviceDpiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class DevicesController {
     DeviceDpiRepository  deviceDpiRepository;
 
     @Autowired
-    DeviceDpiProcessor deviceDpiProcessor;
+    DeviceDpiService deviceDpiService;
 
     @GetMapping(path = "/dpi")
     Page<DeviceDpi> findAllPage(
@@ -34,7 +33,7 @@ public class DevicesController {
 
     @PostMapping(path = "/dpi")
     void process() {
-        deviceDpiProcessor.processDPI();
+        deviceDpiService.processDPI();
     }
 
 

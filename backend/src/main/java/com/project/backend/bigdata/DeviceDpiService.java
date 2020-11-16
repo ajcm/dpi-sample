@@ -12,7 +12,7 @@ import java.math.RoundingMode;
 import java.util.Iterator;
 
 @Service
-public class DeviceDpiProcessor {
+public class DeviceDpiService {
     @Autowired
     SamplesRepository samplesRepository;
 
@@ -28,10 +28,7 @@ public class DeviceDpiProcessor {
         Iterator<Sample> iterator = iterable.iterator();
 
         Sample maxValues = samplesRepository.getHistoryMaxValues("");
-        System.out.println("max values"+maxValues);
-
         Sample minValues = samplesRepository.getHistoryMinValues("");
-        System.out.println("min values"+minValues);
 
         for (int i = 0; iterator.hasNext();i++) {
             Sample sample = iterator.next();
@@ -51,31 +48,16 @@ public class DeviceDpiProcessor {
         device.setDevice(sample.getDevice());
 
         BigDecimal bsod = subtractOne(getNorm (sample.getBsod(), minValues.getBsod(), maxValues.getBsod()));
-
         BigDecimal hardReset = subtractOne(getNorm(sample.getHardReset(), minValues.getHardReset(), maxValues.getHardReset()));
         BigDecimal bootSpeed = subtractOne(getNorm (sample.getBootSpeed(), minValues.getBootSpeed(), maxValues.getBootSpeed()));
         BigDecimal logonDuration = subtractOne(getNorm (sample.getLogonDuration(), minValues.getLogonDuration(), maxValues.getLogonDuration()));
         BigDecimal cpuUsage = subtractOne(getNorm (sample.getCpuUsage(), minValues.getCpuUsage(), maxValues.getCpuUsage()));
         BigDecimal memoryUsage = subtractOne(getNorm (sample.getMemoryUsage(), minValues.getMemoryUsage(), maxValues.getMemoryUsage()));
         BigDecimal systemFreeSpace =subtractOne( getNorm (sample.getSystemFreeSpace(), minValues.getSystemFreeSpace(), maxValues.getSystemFreeSpace()));
-
-
         BigDecimal total = bsod.add(hardReset).add(bootSpeed).add(logonDuration).add(cpuUsage).add(memoryUsage).add(systemFreeSpace);
-
         BigDecimal dpi = (total.multiply(BigDecimal.TEN)).divide(BigDecimal.valueOf(7),5, RoundingMode.HALF_UP);
 
-//        System.out.println(" ");
-//        System.out.println("bsod:" + bsod);
-//        System.out.println("hardResets:" + hardReset );
-//        System.out.println("bootSpeed:" + bootSpeed);
-//        System.out.println("logonDuration:" + logonDuration );
-//        System.out.println("cpuUsage:" + cpuUsage);
-//        System.out.println("memoryUsage:" + memoryUsage );
-//        System.out.println("systemFreeSpace:" + systemFreeSpace );
-//        System.out.println("DPI:" + dpi);
-
         device.setDpi(dpi);
-
         device.setBsod(bsod);
         device.setHardResets(hardReset);
         device.setBootSpeed(bootSpeed);
