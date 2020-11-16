@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,6 +7,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import DpiSlider from './DpiSlider'
+import axios from 'axios';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,10 +22,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleSelect() {
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
+  const [client, setClient] = React.useState('-1');
+  const [office, setOffice] = React.useState('-1');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const [clients] = useGetClients('business/clients')
+
+  const handleClientChange = (event) => {
+    setClient(event.target.value);
+  };
+
+  const handleOfficeChange = (event) => {
+    setClient(event.target.value);
   };
 
   return (
@@ -33,14 +42,15 @@ export default function SimpleSelect() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
-          onChange={handleChange}>
-             <MenuItem value="">
-            <em>None</em>
+          value={client}
+          onChange={handleClientChange}>
+             <MenuItem value="-1">
+            <em>ALL</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          { !_.isEmpty(clients) ? 
+            clients.map(c => <MenuItem key={c.clientId} value={c.clientId}>{c.clientId} - {c.name} </MenuItem>)
+          : ''
+          }
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
@@ -48,14 +58,12 @@ export default function SimpleSelect() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
-          onChange={handleChange}>
+          value={office}
+          onChange={handleOfficeChange}>
              <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+        
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
@@ -70,4 +78,34 @@ export default function SimpleSelect() {
 
     </div>
   );
+}
+
+const SERVER = 'http://localhost:8080/'
+
+export const useGetClients = (url) => {
+  const [items, setItems] = React.useState([]);
+  
+  useEffect(() => {
+    load()
+  },[])
+
+  const load = async () => {
+    try {
+
+      const response = await axios.get(SERVER +url)      
+      console.log(response)
+
+      if (response && response.data ){
+        setItems(response.data)    
+      }else{
+        setItems([])    
+      }
+
+    }catch (error){
+      console.log(error)
+    
+    }
+  }
+
+  return [items]
 }
