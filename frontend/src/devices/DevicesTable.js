@@ -71,13 +71,11 @@ export default function StickyHeadTable() {
 
     console.log("*** filter ***  ",filter )
 
-
-   
   },[filter])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    load(newPage,rowsPerPage)
+    load(newPage,rowsPerPage,filter)
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -85,26 +83,14 @@ export default function StickyHeadTable() {
     console.log('handleChangeRowsPerPage',event.target.value)
     setRowsPerPage(+event.target.value);
     setPage(0);
-    load(0,+event.target.value)
+    load(0,+event.target.value,filter)
   };
 
 
-  const reload = () => {
-    /* 
-    setPage(0);
-    load(0,rowsPerPage)
-    */
 
-
-  };
-
-  const onUpdate = (e) => {
-     
+  const onUpdate = (e) => {     
     setPage(0);
     load(0,rowsPerPage,filter)
-    
-
-    setFilter({e})
 
     console.log(' new filter',filter)
   };
@@ -193,7 +179,7 @@ export default function StickyHeadTable() {
 
   const FormControls = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-          <Button variant="outlined" color="primary" component="span"  onClick={reload} style={{marginLeft:'5px'}}>    Update     </Button>
+          <Button variant="outlined" color="primary" component="span"  onClick={onUpdate} style={{marginLeft:'5px'}}>    Update     </Button>
           { showGraph ? 
             <Fragment>
             <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>

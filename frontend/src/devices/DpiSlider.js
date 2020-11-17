@@ -15,6 +15,8 @@ export default function DiscreteSlider() {
   const classes = useStyles();
   const [value, setValue] = React.useState([0,5]);
 
+  const {filter, setFilter} = React.useContext(FormContext);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

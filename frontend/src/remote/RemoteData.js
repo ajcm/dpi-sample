@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import _ from 'lodash';
 
 const SERVER = 'http://localhost:8080/'
 export const doPost = async  (url,data) =>{
@@ -30,6 +31,18 @@ export const usePagination = (url,page,size) => {
   const load = async (page,size,filter) => {
     try {
       const params = {page,size}
+
+      if (!_.isEmpty(filter.client) && !_.isEqual(filter.client,"-1")){
+        params ['clientId']  = filter.client
+      }
+
+      if (!_.isEmpty(filter.office) && !_.isEqual(filter.office,"-1")){
+        params ['officeId']  = filter.office
+      }
+
+
+
+
       const response = await axios.get(SERVER +url,{params})
 
       if (response && response.data && response.data.content){

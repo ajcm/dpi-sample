@@ -142,7 +142,7 @@ export default function Dashboard() {
             noWrap
             className={classes.title}
           >
-            e-DPI WebApp
+            WebApp
           </Typography>
           
         </Toolbar>

@@ -21,51 +21,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleSelect({onUpdate}) {
+
+const SERVER = 'http://localhost:8080/' 
+
+export default function SimpleSelect() {
   const classes = useStyles();
   //const [filter, setFilter] = React.useState({'client':'-1'});
   const {filter, setFilter} = React.useContext(FormContext);
 
-  //const [clients, setClients] = React.useState([]);
-
   var [clients] = useGetClients()
+  var [offices,loadOffices] = useGetOffices()
 
-  const handleClientChange = (event) => {
-
+  const handleClientChange = async  (event) => {
     var client = event.target.value;
+    var office = '-1'
+    setFilter({...filter,client,office});
 
-    setFilter({...filter,client});
-
-    // if (client != '-1'){
-    //   loadOffices(client)
-    // }
-   // onUpdate(client)
   };
+
+  useEffect(() => {
+
+    loadOO(filter.client)
+
+   
+  },[filter])
 
   const handleOfficeChange = (event) => {
+    var office = event.target.value;
+  setFilter({...filter,office});
+
 
   };
 
+  const loadOO = async (client) =>   {
 
-  // useEffect(() => {
-
-  //   console.log("filter  ",filter )
-
-  //   var clients = [{"clientId": "2","name":"FFFF"}]
-
-  //   setClients(clients);
-
-   
-  // },[])
+    if (client != '-1'){
+      await loadOffices(client)
+    }
 
 
-  const loadOffices = async (clientId) =>{
-
-    const response = await axios.get(SERVER +'business/offices/'+clientId)      
-    console.log(response)
-
-   
   }
+
+
+
+
 
   
 
@@ -89,6 +88,19 @@ export default function SimpleSelect({onUpdate}) {
       </FormControl>
       <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Office</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value= { !_.isEmpty(offices) && filter && filter.office ? filter.office : '-1'}
+          onChange={handleOfficeChange}>
+          <MenuItem value="-1">
+            <em>ALL</em>
+          </MenuItem>
+          { !_.isEmpty(offices) ? 
+            offices.map(c =>  <MenuItem key={c.officeId} value={c.officeId}>{c.officeId}</MenuItem>)
+          : ''
+          }
+        </Select>
      
       </FormControl>
       <FormControl className={classes.formControl}>
@@ -98,19 +110,20 @@ export default function SimpleSelect({onUpdate}) {
   );
 }
 
-const SERVER = 'http://localhost:8080/' + 'business/clients'
 
 export const useGetClients = () => {
   const [items, setItems] = React.useState([]);
   
   useEffect(() => {
-    load()
+    if (_.isEmpty(items)){
+      load()
+    }
   },[])
 
   const load = async () => {
     try {
 
-      const response = await axios.get(SERVER )      
+      const response = await axios.get(SERVER+ 'business/clients' )      
       console.log(response)
 
       if (response && response.data ){
@@ -127,4 +140,27 @@ export const useGetClients = () => {
 
   return [items]
 }
+
+
+export const useGetOffices = () => {
+  const [items, setItems] = React.useState([]);
+  
+
+  const load = async (clientId) => {
+    try {
+
+      console.log('offcies from ' +clientId )
+
+      const response = await axios.get(SERVER +'business/offices/'+clientId)      
+      setItems(response.data ?  response.data : [])
+
+    }catch (error){
+      console.log(error)
+    
+    }
+  }
+
+  return [items,load]
+}
+
 

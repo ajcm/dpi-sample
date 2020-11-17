@@ -5,8 +5,6 @@ import * as React from 'react';
 
 
 
-
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -97,7 +95,7 @@ export default  function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="">
-      e-DPI WebApp
+        WebApp
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
