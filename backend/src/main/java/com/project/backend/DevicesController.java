@@ -18,19 +18,18 @@ import java.util.function.Predicate;
 @Slf4j
 public class DevicesController {
 
-
-
-    @Autowired
-    DeviceDpiRepository  deviceDpiRepository;
-
     @Autowired
     DeviceDpiService deviceDpiService;
 
     @GetMapping(path = "/dpi")
     Page<DeviceDpi> findAllPage(@PageableDefault(page = 0, size = 20)
-                    Pageable pageable, @RequestParam String clientId) {
+                    Pageable pageable,
+                                @RequestParam(required = false) String clientId,
+                                @RequestParam(required = false) String officeId,
+                                @RequestParam(required = false) String from,
+                                @RequestParam(required = false) String to) {
 
-        return deviceDpiRepository.findAll(Specification.where(Sepcs.client(clientId)),pageable);
+        return deviceDpiService.find(clientId,officeId,from,to,pageable);
        // return deviceDpiRepository.findByClient(clientId,pageable);
     }
 

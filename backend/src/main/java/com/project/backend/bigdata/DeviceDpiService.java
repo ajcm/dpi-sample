@@ -5,6 +5,8 @@ import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.repository.DeviceDpiRepository;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,12 +36,14 @@ public class DeviceDpiService {
             Sample sample = iterator.next();
             DeviceDpi deviceDpi = getDeviceDPI(sample,minValues,maxValues);
             deviceDpiRepository.save(deviceDpi);
-
         }
-
-
     }
 
+    public Page<DeviceDpi> find(String clientId, String officeId, String from, String to, Pageable pageable){
+        return deviceDpiRepository.findAll(SpecificationBuilder.getSearchQuery(clientId,officeId,from,to),pageable);
+    }
+
+    /** AUX **/
     private DeviceDpi getDeviceDPI(Sample sample, Sample minValues, Sample maxValues) {
         DeviceDpi device = new DeviceDpi();
 
