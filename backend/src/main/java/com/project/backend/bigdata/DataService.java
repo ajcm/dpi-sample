@@ -51,10 +51,8 @@ public class DataService {
         }catch(IOException ex){
             log.error("General error processing request",ex);
             throw new SubmitException(ex,-1,"General error processing request");
-
         }
     }
-
 
 
     public SubmitResult parse(InputStream stream) throws SubmitException {
@@ -74,7 +72,6 @@ public class DataService {
         }catch(IOException ex){
             log.error("General error processing request",ex);
             throw new SubmitException(ex,-1,"General error processing request");
-
         }
     }
 
@@ -85,7 +82,6 @@ public class DataService {
 
        String line = "";
        int count  = 0 ;
-
 
        try {
            while ((line = br.readLine()) != null) {
@@ -115,17 +111,14 @@ public class DataService {
                result.add(entry);
                count++;
            }
-
        }catch (IOException ex){
            throw new SubmitException(ex);
        }
-
 
        return result;
    }
 
     private static Sample getAsSubmitEntry(String[] elements) {
-
 
         String deviceId = StringUtils.trim(elements[0]);
         String clientId = StringUtils.trim(elements[1]);

@@ -25,6 +25,8 @@ public interface DeviceDpiRepository extends JpaRepository<DeviceDpi, Long>, Jpa
     @Query("select distinct(c.office) from DeviceDpi c where c.client like ?1")
     List<String> findOffices(String client);
 
+    @Query("select distinct(c.device) from DeviceDpi c")
+    List<String> findAllDevices();
 
 
     

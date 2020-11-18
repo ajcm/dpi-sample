@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class DeviceService {
@@ -40,8 +41,14 @@ public class DeviceService {
         }
     }
 
+    /** TODO: support decimals in the range */
     public Page<DeviceDpi> find(String clientId, String officeId, String from, String to, Pageable pageable){
         return deviceDpiRepository.findAll(SpecificationBuilder.getSearchQuery(clientId,officeId,from,to),pageable);
+    }
+
+    public List<String> findDevices(){
+
+        return deviceDpiRepository.findAllDevices();
     }
 
     /** AUX **/

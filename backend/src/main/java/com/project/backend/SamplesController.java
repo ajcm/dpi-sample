@@ -62,10 +62,8 @@ public class SamplesController {
     }
 
     /**
-     * NOTE: Could use a method to upload data in a POST bodu
+     * NOTE: Could use a method to upload data in a POST body
      */
-
-
 
 
     @ExceptionHandler(SubmitException.class)
