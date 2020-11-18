@@ -36,19 +36,14 @@ const FileUploader = ({onSelect}) => {
         />
         <label htmlFor="contained-button-file">
           <Button variant="contained" color="primary" component="span" >
-            Upload
+            Upload CSV File
           </Button>
         </label>
         
       </div>
     )
 
-    // return (
-    //     <div className="file-uploader">
-    //         <input type="file" onChange={handleFileInput}/>
-
-    //     </div>
-    // )
+ 
 }
 
 export default FileUploader

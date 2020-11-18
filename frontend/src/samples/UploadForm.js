@@ -29,9 +29,8 @@ const UploadForm = () => {
 
   return (  
     <Fragment>   
-    <SampleTable/>
-    <h4>Upload sample</h4>
-    <UploadFile onSelect={onSelect} />
+        <UploadFile onSelect={onSelect} />
+        <SampleTable/>
     </Fragment>
   );
 };

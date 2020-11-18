@@ -200,7 +200,7 @@ const FormFilters = ({onUpdate}) =>(
 
   return (
     <Paper className={classes.root}>
-      <FormFilters onUpdate={onUpdate} />
+      <FormFilters  />
       <TableContainer className={classes.container}>
         <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
           <DeviceTableHead/>

@@ -36,37 +36,49 @@ export default function SimpleSelect() {
     var client = event.target.value;
     var office = '-1'
     setFilter({...filter,client,office});
-
   };
-
-  useEffect(() => {
-
-    loadOO(filter.client)
-
-   
-  },[filter])
 
   const handleOfficeChange = (event) => {
     var office = event.target.value;
-  setFilter({...filter,office});
-
-
+    setFilter({...filter,office});
   };
 
-  const loadOO = async (client) =>   {
+  const handleOrderChange= (event) => {
+    var order = event.target.value;
+    setFilter({...filter,order});
+  };
 
+  const handleFromChange= (event) => {
+    var from = event.target.value;
+    setFilter({...filter,from});
+  };
+
+  const handleToChange= (event) => {
+    var to = event.target.value;
+    setFilter({...filter,to});
+  };
+
+
+
+
+
+
+  /** Workaround: 
+   * having some issues when setting the client and getting the offices at the same time
+   * 
+   */
+  useEffect(() => {
+    loadOffices_(filter.client)
+  },[filter])
+
+
+  const loadOffices_ = async (client) =>   {
     if (client != '-1'){
       await loadOffices(client)
     }
 
-
   }
 
-
-
-
-
-  
 
   return (
     <div>
@@ -81,11 +93,12 @@ export default function SimpleSelect() {
             <em>ALL</em>
           </MenuItem>
           { !_.isEmpty(clients) ? 
-            clients.map(c => c && c.clientId ?  <MenuItem key={c.clientId} value={c.clientId}>{c.clientId}</MenuItem> : '')
+            clients.map(c => c && c.clientId ?  <MenuItem key={c.clientId} value={c.clientId}>({c.clientId}){c.name}</MenuItem> : '')
           : ''
           }
         </Select>
       </FormControl>
+
       <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Office</InputLabel>
       <Select
@@ -97,15 +110,73 @@ export default function SimpleSelect() {
             <em>ALL</em>
           </MenuItem>
           { !_.isEmpty(offices) ? 
-            offices.map(c =>  <MenuItem key={c.officeId} value={c.officeId}>{c.officeId}</MenuItem>)
+            offices.map(c =>  <MenuItem key={c.officeId} value={c.officeId}>{c.name}</MenuItem>)
           : ''
           }
         </Select>
-     
       </FormControl>
+
       <FormControl className={classes.formControl}>
-        <DpiSlider/>
+      <InputLabel id="demo-simple-select-label">From</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value= { filter && filter.from ? filter.from : '-1'}
+          onChange={handleFromChange}>
+          <MenuItem value="-1"><em>NONE</em></MenuItem>
+          <MenuItem value="0">0</MenuItem>
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="5">5</MenuItem>
+          <MenuItem value="6">6</MenuItem>
+          <MenuItem value="7">7</MenuItem>
+          <MenuItem value="8">8</MenuItem>
+          <MenuItem value="9">9</MenuItem>   
+        </Select>
       </FormControl>
+
+      <FormControl className={classes.formControl}>
+      <InputLabel id="demo-simple-select-label">To</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value= {filter && filter.to ? filter.to : '-1'}
+          onChange={handleToChange}>
+          <MenuItem value="-1"><em>NONE</em></MenuItem>          
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="5">5</MenuItem>
+          <MenuItem value="6">6</MenuItem>
+          <MenuItem value="7">7</MenuItem>
+          <MenuItem value="8">8</MenuItem>
+          <MenuItem value="9">9</MenuItem>   
+          <MenuItem value="10">10</MenuItem>   
+        </Select>
+      </FormControl>
+
+      <FormControl className={classes.formControl}>
+      <InputLabel id="demo-simple-select-label">Order</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value= { filter && filter.order ? filter.order : 'ASC'}
+          onChange={handleOrderChange}>
+          <MenuItem value="ASC">
+            <em>Ascending</em>
+          </MenuItem>
+          <MenuItem value="DESC">
+            <em>Descending</em>
+          </MenuItem>
+         
+        </Select>
+      </FormControl>
+
+
+  
     </div>
   );
 }

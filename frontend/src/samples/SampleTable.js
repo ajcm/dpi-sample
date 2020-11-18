@@ -48,6 +48,12 @@ const useStyles = makeStyles({
   icon : {
     width: 25,
     height: 25,  
+  },
+  table: {
+    "& th": {
+      fontWeight: 'bold',
+      backgroundColor: 'silver'
+    }
   }
 });
 
@@ -85,14 +91,10 @@ export default function StickyHeadTable() {
   };
 
 
-
-  console.log('items',items)
-
-
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
-        <Table  size="small" stickyHeader aria-label="sticky table">
+        <Table  size="small" stickyHeader aria-label="sticky table" className={classes.table}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -111,7 +113,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {!_.isEmpty(items) ? items.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.device}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -137,8 +139,8 @@ export default function StickyHeadTable() {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Paper   elevation={0}  className={classes.paper} >
-       <Button variant="outlined" color="primary" component="span"  onClick={reload}>    Refresh     </Button>
-       <Button variant="outlined" color="primary" component="span"  onClick={clearAllRecords} style={{marginLeft:'5px'}}>    Clear All     </Button>
+       <Button variant="outlined" color="primary" component="span"  onClick={reload}>    Refresh Table     </Button>
+       <Button  color="primary" component="span"  onClick={clearAllRecords} style={{marginLeft:'5px'}}>  Delete All Samples </Button>
        </Paper>
     </Paper>
   );

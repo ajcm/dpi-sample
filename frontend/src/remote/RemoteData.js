@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import _ from 'lodash';
+import { SERVER } from '../Configuration'
 
-const SERVER = 'http://localhost:8080/'
 export const doPost = async  (url,data) =>{
   return await axios.post(SERVER+url, data)
 }
@@ -32,21 +32,13 @@ export const usePagination = (url,page,size) => {
     try {
       const params = {page,size}
 
-      if (!_.isEmpty(filter.client) && !_.isEqual(filter.client,"-1")){
-        params ['clientId']  = filter.client
+      if (filter){
+        getFilterParams(params,filter)
       }
-
-      if (!_.isEmpty(filter.office) && !_.isEqual(filter.office,"-1")){
-        params ['officeId']  = filter.office
-      }
-
-
-
 
       const response = await axios.get(SERVER +url,{params})
 
       if (response && response.data && response.data.content){
-        console.log(response.data.content)
         setItems(response.data.content)
         setTotal(response.data.totalElements)
       }else{
@@ -61,4 +53,29 @@ export const usePagination = (url,page,size) => {
   }
 
   return [items,total, load]
+}
+
+
+const getFilterParams = (params,filter) => {
+
+    if (!_.isEmpty(filter.client) && !_.isEqual(filter.client,"-1")){
+      params ['clientId']  = filter.client
+    }
+
+    if (!_.isEmpty(filter.office) && !_.isEqual(filter.office,"-1")){
+      params ['officeId']  = filter.office
+    }
+
+    if (!_.isEmpty(filter.order)){
+      params ['sort']  = 'dpi,'+filter.order
+    }
+
+    if (!_.isEmpty(filter.from) && !_.isEqual(filter.from,"-1")){
+      params ['from']  = filter.from
+    }
+
+    if (!_.isEmpty(filter.to) && !_.isEqual(filter.to,"-1")){
+      params ['to']  = filter.to
+    }
+
 }
