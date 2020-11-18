@@ -18,9 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const FileUploader = ({onSelect}) => {
     const classes = useStyles();
 
-
     const handleFileInput = (e) => {
-        console.log(e.target.files[0])
         onSelect(e.target.files[0])
     }
 

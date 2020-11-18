@@ -9,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import React,{useEffect} from 'react';
+import React,{useEffect, forwardRef,useImperativeHandle} from 'react';
 import _ from 'lodash';
 
 import {usePagination,doDelete} from '../remote/RemoteData'
@@ -24,13 +24,8 @@ const columns = [
   { id: 'logonDuration', label: 'Logon Duration', minWidth: 100},
   { id: 'cpuUsage', label: 'CPU', minWidth: 100},
   { id: 'memoryUsage', label: 'Memory', minWidth: 100},
-  { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100},
-  
-
- 
+  { id: 'systemFreeSpace', label: 'Free Space', minWidth: 100}, 
 ];
-
-
 
 
 const useStyles = makeStyles({
@@ -57,13 +52,11 @@ const useStyles = makeStyles({
   }
 });
 
-export default function StickyHeadTable() {
+const SampleTable =  forwardRef((props, ref) => {
   const classes = useStyles();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-
   const [items,total,load] = usePagination('samples/page',page,rowsPerPage)
 
   const handleChangePage = (event, newPage) => {
@@ -84,11 +77,18 @@ export default function StickyHeadTable() {
   };
 
   const clearAllRecords = async () => {
-
     await deleteAllRecords()
-
     load(0,rowsPerPage)
   };
+
+  const deleteAllRecords = async () => {
+    await doDelete('samples/all')
+  }
+
+  useImperativeHandle(ref, () => {
+    return {
+        refresh: () =>  reload()
+  }});
 
 
   return (
@@ -144,9 +144,10 @@ export default function StickyHeadTable() {
        </Paper>
     </Paper>
   );
-}
+})
 
 
-const deleteAllRecords = async () => {
-   await doDelete('samples/all')
-}
+export default SampleTable
+
+
+
