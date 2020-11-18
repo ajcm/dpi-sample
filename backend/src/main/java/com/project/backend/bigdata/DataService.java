@@ -1,20 +1,15 @@
-package com.project.backend.bigdata.parsing;
+package com.project.backend.bigdata;
 
 import com.project.backend.bigdata.domain.Sample;
-import com.project.backend.bigdata.SubmitResult;
+import com.project.backend.bigdata.domain.SubmitResult;
+import com.project.backend.bigdata.domain.SubmitException;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +34,7 @@ import java.util.List;
 @Service
 @ApplicationScope
 @Slf4j
-public class DataParserCSV {
+public class DataService {
 
     public static String  SPLIT_CHAR = ",";
 
@@ -50,7 +45,6 @@ public class DataParserCSV {
 
         try (
                 ByteArrayInputStream stream = new ByteArrayInputStream(file.getBytes());
-
         ) {
            return parse(stream);
 
@@ -69,7 +63,7 @@ public class DataParserCSV {
                 InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(streamReader);
         ) {
-            List<Sample> entries = DataParserCSV.parse(bufferedReader, true);
+            List<Sample> entries = DataService.parse(bufferedReader, true);
 
             /* TODO: Improve performance like executing a Batch insert */
             samplesRepository.saveAll(entries);
@@ -119,9 +113,7 @@ public class DataParserCSV {
                }
 
                result.add(entry);
-
                count++;
-
            }
 
        }catch (IOException ex){

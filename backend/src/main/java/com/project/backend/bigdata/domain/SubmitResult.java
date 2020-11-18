@@ -1,4 +1,4 @@
-package com.project.backend.bigdata;
+package com.project.backend.bigdata.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

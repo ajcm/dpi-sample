@@ -21,8 +21,6 @@ public class BusinessService {
     DeviceDpiRepository deviceDpiRepository;
 
     /* OBS: this would be another datasource that contains all the clients and offices details */
-
-
     public List<Client> getClients(){
         List<Client> result = new LinkedList<>();
         List<String>  clients = deviceDpiRepository.findAllClients();
@@ -51,7 +49,6 @@ public class BusinessService {
     /* Aux */
     private static String getClientName(String c) {
         int index = NumberUtils.toInt(c,0);
-
         return CLIENTS[index % CLIENTS.length];
     }
 

@@ -1,4 +1,4 @@
-package com.project.backend.bigdata.parsing;
+package com.project.backend.bigdata.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ public class SubmitException extends Exception {
     int line;
     String message;
 
-    SubmitException(Exception e){
+    public SubmitException(Exception e){
         super(e);
     }
 

@@ -4,6 +4,7 @@ import com.project.backend.bigdata.domain.DeviceDpi;
 import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.repository.DeviceDpiRepository;
 import com.project.backend.bigdata.repository.SamplesRepository;
+import com.project.backend.bigdata.repository.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import java.math.RoundingMode;
 import java.util.Iterator;
 
 @Service
-public class DeviceDpiService {
+public class DeviceService {
     @Autowired
     SamplesRepository samplesRepository;
 

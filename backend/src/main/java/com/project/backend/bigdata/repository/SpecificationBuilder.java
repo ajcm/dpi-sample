@@ -1,4 +1,4 @@
-package com.project.backend.bigdata;
+package com.project.backend.bigdata.repository;
 
 import com.project.backend.bigdata.domain.DeviceDpi;
 import com.project.backend.bigdata.domain.DeviceDpi_;
