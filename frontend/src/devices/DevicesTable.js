@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import React,{useEffect,useRef,Fragment} from 'react';
 import _ from 'lodash';
 import DpiGraph from '../devices/DpiGraph'
-import TableFilter from './TableFilter'
+import FormFilter from './forms/FormFilter'
 
 import {usePagination,doDelete} from '../remote/RemoteData'
 import { FormContext } from '../context/FormContext';
@@ -21,7 +21,7 @@ const columns = [
   { id: 'client', label: 'Client', minWidth: 100}, 
   { id: 'office', label: 'Office', minWidth: 100},
   { id: 'device', label: 'Device', minWidth: 100},
-  { id: 'dpi', label: 'DPI', minWidth: 100},
+  { id: 'dpi', label: 'DPI', minWidth: 100, format: (value) => (value.toFixed(2))},
  
 ];
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
 });
 
 
-export default function StickyHeadTable() {
+export default function DeviceTable() {
   const classes = useStyles();
 
   const childRef = useRef();
@@ -68,9 +68,7 @@ export default function StickyHeadTable() {
   const {filter, setFilter} = React.useContext(FormContext);
 
    useEffect(() => {
-
     console.log("*** filter ***  ",filter )
-
   },[filter])
 
   const handleChangePage = (event, newPage) => {
@@ -179,7 +177,7 @@ export default function StickyHeadTable() {
 
   const FormControls = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-          <Button variant="outlined" color="primary" component="span"  onClick={onUpdate} style={{marginLeft:'5px'}}>    Update     </Button>
+        
           { showGraph ? 
             <Fragment>
             <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
@@ -191,9 +189,10 @@ export default function StickyHeadTable() {
     </Paper>
   )
 
-const FormFilters = ({onUpdate}) =>(
+const FormFilters = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-      <TableFilter onUpdate={onUpdate}/>     
+      <FormFilter/>
+      <Button variant="outlined" color="primary" component="span"  onClick={onUpdate} style={{marginLeft:'5px'}}>    Update     </Button>     
     </Paper>
   )
 

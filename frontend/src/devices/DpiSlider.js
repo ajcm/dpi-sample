@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { FormContext } from '../context/FormContext';
 
 const useStyles = makeStyles({
   root: {
@@ -15,10 +16,12 @@ export default function DiscreteSlider() {
   const classes = useStyles();
   const [value, setValue] = React.useState([0,5]);
 
-  //const {filter, setFilter} = React.useContext(FormContext);
+  const {filter, setFilter} = React.useContext(FormContext);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (event, range) => {
+
+    setFilter(range);
+    event.preventDefault()
   };
 
   return (
@@ -35,7 +38,7 @@ export default function DiscreteSlider() {
         min={0}
         max={10}
         valueLabelDisplay="auto"
-        value={value}
+        value={filter.range}
       />
     </div>
   );
