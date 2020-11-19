@@ -6,7 +6,7 @@ import SelectClient from './SelectClient';
 import SelectOffice from './SelectOffice';
 import SelectOrder from './SelectOrder';
 import SelectRange from './SelectRange';
-
+import SelectDevice from './SelectDevice';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -34,6 +34,10 @@ export default function SimpleSelect() {
       </FormControl>
 
       <SelectRange/>
+
+      <FormControl className={classes.formControl}>
+        <SelectDevice/>
+      </FormControl>
 
   
 

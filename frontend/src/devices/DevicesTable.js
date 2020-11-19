@@ -63,7 +63,7 @@ export default function DeviceTable() {
   const [showGraph, setShowGraph] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [items,total,load] = usePagination('devices/dpi',page,rowsPerPage)
+  const [items,total,load] = usePagination('dpi/',page,rowsPerPage)
 
   const {filter, setFilter} = React.useContext(FormContext);
 

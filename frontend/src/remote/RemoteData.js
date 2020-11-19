@@ -66,6 +66,10 @@ const getFilterParams = (params,filter) => {
       params ['officeId']  = filter.office
     }
 
+    if (!_.isEmpty(filter.device)){
+      params ['deviceId']  = filter.device
+    }
+
     if (!_.isEmpty(filter.order)){
       params ['sort']  = 'dpi,'+filter.order
     }
