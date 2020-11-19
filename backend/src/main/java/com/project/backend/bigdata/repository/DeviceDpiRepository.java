@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,10 +13,7 @@ import java.util.List;
 @Repository
 public interface DeviceDpiRepository extends JpaRepository<DeviceDpi, Long>, JpaSpecificationExecutor<DeviceDpi> {
 
-
-        // @Query("select c from DeviceDpi c")
-        // Page<DeviceDpi> findAllPage(Pageable pageable);
-        Page<DeviceDpi> findByClient(String client,Pageable pageable);
+    Page<DeviceDpi> findByClient(String client,Pageable pageable);
 
     @Query("select distinct(c.client) from DeviceDpi c")
     List<String> findAllClients();
@@ -28,8 +24,6 @@ public interface DeviceDpiRepository extends JpaRepository<DeviceDpi, Long>, Jpa
     @Query("select distinct(c.device) from DeviceDpi c")
     List<String> findAllDevices();
 
-
-    
 
 }
 

@@ -1,9 +1,10 @@
 package com.project.backend;
 
-import com.project.backend.bigdata.domain.SubmitResult;
-import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.DataService;
+import com.project.backend.bigdata.DeviceService;
+import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.domain.SubmitException;
+import com.project.backend.bigdata.domain.SubmitResult;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
 
 @RestController
 @RequestMapping("/")
@@ -27,6 +25,9 @@ public class SamplesController {
 
     @Autowired
     DataService dataService;
+
+    @Autowired
+    DeviceService deviceService;
 
     @Autowired
     SamplesRepository samplesRepository;
@@ -75,11 +76,21 @@ public class SamplesController {
      */
     @PostMapping("/samples/data")
     @ResponseBody
-    public ResponseEntity<SubmitResult>  uploadData(HttpServletRequest request) throws SubmitException, IOException {
-
+    public ResponseEntity<SubmitResult>  uploadData(HttpServletRequest request) throws SubmitException {
         SubmitResult result =  dataService.parseRequest(request);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    /**
+     * Method to upload data in a POST body
+     */
+    @PostMapping("/samples/process")
+    @ResponseBody
+    public  ResponseEntity<Long>  process(){
+        long count =  deviceService.processDPI();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
 
 
     @ExceptionHandler(SubmitException.class)

@@ -19,6 +19,11 @@ import java.util.List;
 @Slf4j
 public class BusinessController {
 
+    /**
+     * Handles data regarding the Clients and Offices
+     * not related with Samples or DPI calculation.
+     */
+
     @Autowired
     BusinessService businessService;
 

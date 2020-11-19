@@ -9,16 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- Device_ID
- Client_ID
- Office_ID
- BSOD_count
- Hard_reset_count
- Boot_Speed
- Logon_Duration
- CPU_Usage
- Memory_Usage
- System_Free_Space
+ DPI calculation entity
  */
 
 @Data

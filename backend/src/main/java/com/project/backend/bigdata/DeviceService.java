@@ -5,6 +5,7 @@ import com.project.backend.bigdata.domain.Sample;
 import com.project.backend.bigdata.repository.DeviceDpiRepository;
 import com.project.backend.bigdata.repository.SamplesRepository;
 import com.project.backend.bigdata.repository.SpecificationBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +14,17 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DeviceService {
+
+    /**
+     * Service that calculates and retrieves DPI data from DPI
+     * */
+
     @Autowired
     SamplesRepository samplesRepository;
 
@@ -24,21 +32,43 @@ public class DeviceService {
     DeviceDpiRepository deviceDpiRepository;
 
 
-    public void processDPI(){
-        //clear existing
-        deviceDpiRepository.deleteAll();
+    public long processDPI(){
+       log.info("ProcessDPI");
+
+       long samplesCount =  samplesRepository.count();
+
+       if (samplesCount == 0 ){
+           log.info("No samples to process");
+           return 0;
+       }
+
+        log.info("Samples to process: " + samplesCount);
 
         Iterable<Sample> iterable = samplesRepository.findAll();
         Iterator<Sample> iterator = iterable.iterator();
 
+        if (!iterator.hasNext()){
+            log.info("No samples to process");
+            return 0;
+        }
+
+        long count = 0;
+
         Sample maxValues = samplesRepository.getHistoryMaxValues("");
         Sample minValues = samplesRepository.getHistoryMinValues("");
 
+        List<DeviceDpi> processed = new LinkedList<>();
         for (int i = 0; iterator.hasNext();i++) {
             Sample sample = iterator.next();
             DeviceDpi deviceDpi = getDeviceDPI(sample,minValues,maxValues);
-            deviceDpiRepository.save(deviceDpi);
+            processed.add(deviceDpi);
+            count ++;
         }
+
+        log.info("saving : " + processed.size());
+        deviceDpiRepository.saveAll(processed);
+
+        return count;
     }
 
     /** TODO: support decimals in the range */
@@ -51,7 +81,7 @@ public class DeviceService {
     }
 
     /** AUX **/
-    private DeviceDpi getDeviceDPI(Sample sample, Sample minValues, Sample maxValues) {
+    static public DeviceDpi getDeviceDPI(Sample sample, Sample minValues, Sample maxValues) {
         DeviceDpi device = new DeviceDpi();
 
         device.setClient(sample.getClient());

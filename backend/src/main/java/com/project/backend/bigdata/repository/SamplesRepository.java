@@ -13,15 +13,6 @@ public interface SamplesRepository extends CrudRepository<Sample, Long> {
     @Query("select c from Sample c")
     Page<Sample> findAllPage(Pageable pageable);
 
-/*
-    private int bsod;
-    private int hardReset;
-    private long bootSpeed;
-    private long logonDuration;
-    private double cpuUsage;
-    private double memoryUsage;
-    private long systemFreeSpace;
- */
     /* Max */
     @Query("select max(c.bsod) from Sample c")
     int maxBsod();
@@ -105,11 +96,6 @@ public interface SamplesRepository extends CrudRepository<Sample, Long> {
         return sample;
     }
 
-
-
-
-
-    
 
 }
 

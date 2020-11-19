@@ -19,23 +19,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Expected fields
- Device_ID
- Client_ID
- Office_ID
- BSOD_count
- Hard_reset_count
- Boot_Speed
- Logon_Duration
- CPU_Usage
- Memory_Usage
- System_Free_Space
- */
+
 @Service
 @ApplicationScope
 @Slf4j
 public class DataService {
+
+    /**
+     *  Service that parses samples from CVS entries
+     * */
 
     public static String  SPLIT_CHAR = ",";
 

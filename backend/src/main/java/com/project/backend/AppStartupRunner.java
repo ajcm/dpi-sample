@@ -23,8 +23,9 @@ public class AppStartupRunner implements ApplicationRunner {
     @Autowired
     DeviceService deviceService;
 
-
     /**
+     * Spring Start Task
+     * Populates tables
      * Loads the cvs data and processes the DPI.
      *
      */
