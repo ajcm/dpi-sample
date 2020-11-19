@@ -11,11 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.project.backend.bigdata.DpiCalculator.getDeviceDPI;
 
 @Service
 @Slf4j
@@ -80,55 +80,7 @@ public class DeviceService {
         return deviceDpiRepository.findAllDevices();
     }
 
-    /** AUX **/
-    static public DeviceDpi getDeviceDPI(Sample sample, Sample minValues, Sample maxValues) {
-        DeviceDpi device = new DeviceDpi();
 
-        device.setClient(sample.getClient());
-        device.setOffice(sample.getOffice());
-        device.setDevice(sample.getDevice());
 
-        BigDecimal bsod = subtractOne(getNorm (sample.getBsod(), minValues.getBsod(), maxValues.getBsod()));
-        BigDecimal hardReset = subtractOne(getNorm(sample.getHardReset(), minValues.getHardReset(), maxValues.getHardReset()));
-        BigDecimal bootSpeed = subtractOne(getNorm (sample.getBootSpeed(), minValues.getBootSpeed(), maxValues.getBootSpeed()));
-        BigDecimal logonDuration = subtractOne(getNorm (sample.getLogonDuration(), minValues.getLogonDuration(), maxValues.getLogonDuration()));
-        BigDecimal cpuUsage = subtractOne(getNorm (sample.getCpuUsage(), minValues.getCpuUsage(), maxValues.getCpuUsage()));
-        BigDecimal memoryUsage = subtractOne(getNorm (sample.getMemoryUsage(), minValues.getMemoryUsage(), maxValues.getMemoryUsage()));
-        BigDecimal systemFreeSpace =subtractOne( getNorm (sample.getSystemFreeSpace(), minValues.getSystemFreeSpace(), maxValues.getSystemFreeSpace()));
-        BigDecimal total = bsod.add(hardReset).add(bootSpeed).add(logonDuration).add(cpuUsage).add(memoryUsage).add(systemFreeSpace);
-        BigDecimal dpi = (total.multiply(BigDecimal.TEN)).divide(BigDecimal.valueOf(7),5, RoundingMode.HALF_UP);
-
-        device.setDpi(dpi);
-        device.setBsod(bsod);
-        device.setHardResets(hardReset);
-        device.setBootSpeed(bootSpeed);
-        device.setLogonDuration(logonDuration);
-        device.setCpuUsage(cpuUsage);
-        device.setMemoryUsage(memoryUsage);
-        device.setSystemFreeSpace(systemFreeSpace);
-
-        return device;
-    }
-
-    private static BigDecimal subtractOne (BigDecimal d){
-        return BigDecimal.ONE.subtract(d);
-    }
-
-    private static BigDecimal getNorm (double value,double min, double max){
-
-        if (min == max){
-            return BigDecimal.ZERO;
-        }
-
-        BigDecimal a = BigDecimal.valueOf(value).subtract(BigDecimal.valueOf(min));
-        BigDecimal b = BigDecimal.valueOf(max).subtract(BigDecimal.valueOf(min));
-
-        BigDecimal norm = a.divide(b,5, RoundingMode.HALF_UP);
-
-        norm = (norm.compareTo(BigDecimal.ZERO) < 0) ? BigDecimal.ZERO :  norm;
-        norm = (norm.compareTo(BigDecimal.ONE) > 0) ? BigDecimal.ONE :  norm;
-
-        return norm;
-    }
 
 }

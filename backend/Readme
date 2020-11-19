@@ -1,0 +1,32 @@
+Assignment 1
+Developments done for this assignment were made in a way as to get a suitable for a proof-of-concept application,
+therefore parts of the applications were greatly simplified, performance and security issues were overlooked.
+
+The backend is implemented with Spring Boot using JPA and a Rest API, it could be easily integrated as an microservice,
+the ports and request are open to everyone and require some sort of authentication (CORS, JWT) even in early development stages.
+Unit tests were made as an examples as time was scarce and Integrations tests would be more efficient and reliable.
+
+There were are issues in the frontend that would require some changes, however, like in any project there was a deadline
+had to be fulfilled.
+
+Some aspect in the assignment were not too clear, had doubts regarding on how the min and max values are calculated and
+from what set of samples and if dpi values needed to be saved for each calculation, for simplification dpi was calculated
+min and max values from all the values in the samples.
+
+** Backend **
+All the data processing was implemented in JPA as a mocked big data interface, since JPA is also used to persist Business
+data this was the easiest and simpler way to do it.
+
+All the code in package ‘big-data’ should be seen as a dummy implementation to be used only as proof of concept.
+There are two Rest Controllers one for Samples and DPI related activities (SamplesController) and the other to handle strictly
+business domain objects (BusinessController).
+
+The code follows the common structure of Controller → Service → Repository, for simplification the creating of interfaces
+for services was skipped.
+
+There are two main entities Samples and DeviceDpi, samples are uploaded via a CVS file or read from a post request and then
+
+DPI values are calculated for each device and saved as DeviceDpi entities.
+Spring boot is running a task at startup (AppStartupRunner) that reads entries from a CVS file and process the entries to
+populate the tables.
+
