@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 public class DeviceDpi_ {
     public static volatile SingularAttribute<DeviceDpi, String> client;
     public static volatile SingularAttribute<DeviceDpi, String> office;
+    public static volatile SingularAttribute<DeviceDpi, String> device;
     public static volatile SingularAttribute<DeviceDpi, BigDecimal> dpi;
 }
 

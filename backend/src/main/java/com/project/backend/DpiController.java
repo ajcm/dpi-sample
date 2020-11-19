@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/devices")
+@RequestMapping("/")
 @Slf4j
 public class DpiController {
 
@@ -30,16 +30,15 @@ public class DpiController {
                     Pageable pageable,
                                 @RequestParam(required = false) String clientId,
                                 @RequestParam(required = false) String officeId,
+                                @RequestParam(required = false) String deviceId,
                                 @RequestParam(required = false) String from,
                                 @RequestParam(required = false) String to) {
 
-        return deviceService.find(clientId,officeId,from,to,pageable);
+        return deviceService.find(clientId,officeId,deviceId,from,to,pageable);
     }
 
     @GetMapping(path = "/dpi/devices")
-    List<Device> findDevices(@PageableDefault(page = 0, size = 20)
-                                        Pageable pageable,
-                             @RequestParam(required = false) String clientId,
+    List<Device> findDevices(@RequestParam(required = false) String clientId,
                              @RequestParam(required = false) String officeId,
                              @RequestParam(required = false) String from,
                              @RequestParam(required = false) String to) {

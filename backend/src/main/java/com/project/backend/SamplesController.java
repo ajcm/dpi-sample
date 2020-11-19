@@ -15,6 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
+
 @RestController
 @RequestMapping("/")
 @Slf4j
@@ -34,6 +39,10 @@ public class SamplesController {
 
     /** Samples */
 
+    @GetMapping("/samples/all")
+    public Iterable<Sample> getAll(){
+        return samplesRepository.findAll();
+    }
 
     /** DELETE: TODO Security */
     @DeleteMapping("/samples/all")
@@ -62,8 +71,15 @@ public class SamplesController {
     }
 
     /**
-     * NOTE: Could use a method to upload data in a POST body
+     * Method to upload data in a POST body
      */
+    @PostMapping("/samples/data")
+    @ResponseBody
+    public ResponseEntity<SubmitResult>  uploadData(HttpServletRequest request) throws SubmitException, IOException {
+
+        SubmitResult result =  dataService.parseRequest(request);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 
     @ExceptionHandler(SubmitException.class)

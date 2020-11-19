@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
@@ -47,6 +48,19 @@ public class DataService {
                 ByteArrayInputStream stream = new ByteArrayInputStream(file.getBytes());
         ) {
            return parse(stream);
+
+        }catch(IOException ex){
+            log.error("General error processing request",ex);
+            throw new SubmitException(ex,-1,"General error processing request");
+        }
+    }
+
+    public SubmitResult parseRequest(HttpServletRequest request) throws SubmitException {
+
+        try (
+                InputStream stream = request.getInputStream();
+        ) {
+            return parse(stream);
 
         }catch(IOException ex){
             log.error("General error processing request",ex);

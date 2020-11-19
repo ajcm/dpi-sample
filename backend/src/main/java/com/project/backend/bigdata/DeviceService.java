@@ -42,12 +42,11 @@ public class DeviceService {
     }
 
     /** TODO: support decimals in the range */
-    public Page<DeviceDpi> find(String clientId, String officeId, String from, String to, Pageable pageable){
-        return deviceDpiRepository.findAll(SpecificationBuilder.getSearchQuery(clientId,officeId,from,to),pageable);
+    public Page<DeviceDpi> find(String clientId, String officeId,String deviceId,String from, String to, Pageable pageable){
+        return deviceDpiRepository.findAll(SpecificationBuilder.getSearchQuery(clientId,officeId,deviceId,from,to),pageable);
     }
 
     public List<String> findDevices(){
-
         return deviceDpiRepository.findAllDevices();
     }
 

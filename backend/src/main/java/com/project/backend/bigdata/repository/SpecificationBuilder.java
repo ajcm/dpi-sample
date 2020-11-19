@@ -16,7 +16,16 @@ import java.util.List;
 @Slf4j
 public class SpecificationBuilder {
 
-    public static Specification<DeviceDpi> getSearchQuery(String clientId, String officeId, String from, String to) {
+    /**
+     * TODO: issue when comparing to and from with decimals.
+     * @param clientId
+     * @param officeId
+     * @param deviceId
+     * @param from
+     * @param to
+     * @return
+     */
+    public static Specification<DeviceDpi> getSearchQuery(String clientId, String officeId,String deviceId, String from, String to) {
         return (Specification<DeviceDpi>) (root, query, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
@@ -28,6 +37,11 @@ public class SpecificationBuilder {
             if (StringUtils.isNotBlank(clientId) && StringUtils.isNotBlank(officeId) ) {
                 predicates.add(criteriaBuilder.equal(root.get(DeviceDpi_.office), officeId));
             }
+
+            if (StringUtils.isNotBlank(deviceId) && StringUtils.isNotBlank(deviceId) ) {
+                predicates.add(criteriaBuilder.like(root.get(DeviceDpi_.device), "%"+deviceId+"%"));
+            }
+
 
 
             if (StringUtils.isNotBlank(from) && StringUtils.isNumeric(from)) {
@@ -49,6 +63,7 @@ public class SpecificationBuilder {
                     log.info("Error conversion",e);
                 }
             }
+
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
