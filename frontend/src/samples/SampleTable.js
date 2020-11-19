@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,10 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import React,{useEffect, forwardRef,useImperativeHandle} from 'react';
 import _ from 'lodash';
+import React, { forwardRef, useImperativeHandle } from 'react';
+import { doDelete, doPost, usePagination } from '../remote/RemoteData';
 
-import {usePagination,doDelete} from '../remote/RemoteData'
 
 const columns = [
   { id: 'device', label: 'Device', minWidth: 100},
@@ -58,31 +57,38 @@ const SampleTable =  forwardRef((props, ref) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [items,total,load] = usePagination('samples/page',page,rowsPerPage)
+  const sort = "devices,ASC"
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    load(newPage,rowsPerPage)
+    load(newPage,rowsPerPage,{sort})
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-    load(0,+event.target.value)
+    load(0,+event.target.value,{sort})
   };
 
 
   const reload = (event, newPage) => {
     setPage(0);
-    load(0,rowsPerPage)
+    load(0,rowsPerPage,{sort})
   };
 
   const clearAllRecords = async () => {
     await deleteAllRecords()
-    load(0,rowsPerPage)
+    reload()
   };
 
   const deleteAllRecords = async () => {
     await doDelete('samples/all')
+  }
+
+  const process = async () => {
+    var count = await doPost('samples/process')
+    alert("processed: " + count.data + " items")
+
   }
 
   useImperativeHandle(ref, () => {
@@ -139,7 +145,8 @@ const SampleTable =  forwardRef((props, ref) => {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Paper   elevation={0}  className={classes.paper} >
-       <Button variant="outlined" color="primary" component="span"  onClick={reload}>    Refresh Table     </Button>
+      <Button variant="outlined" color="primary" component="span" style={{marginLeft:'5px'}}  onClick={reload}>Refresh Table</Button>
+       <Button variant="outlined" color="primary" component="span" style={{marginLeft:'5px'}}  onClick={process}>Process Samples</Button>
        <Button  color="primary" component="span"  onClick={clearAllRecords} style={{marginLeft:'5px'}}>  Delete All Samples </Button>
        </Paper>
     </Paper>

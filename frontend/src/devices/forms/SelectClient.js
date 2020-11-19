@@ -65,11 +65,9 @@ export const useGetClients = () => {
   },[items])
 
   const load = async () => {
+    
     try {
-
       const response = await axios.get(SERVER+ 'business/clients' )      
-      console.log(response)
-
       if (response && response.data ){
         setItems(response.data)    
       }else{

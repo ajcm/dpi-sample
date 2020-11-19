@@ -1,8 +1,5 @@
-import React,{forwardRef,useImperativeHandle} from 'react'
-import { Bar } from '@reactchartjs/react-chart.js'
-import Button from '@material-ui/core/Button';
-
-
+import { Bar } from '@reactchartjs/react-chart.js';
+import React, { forwardRef, useImperativeHandle } from 'react';
 
 const options = {
   scales: {
@@ -17,7 +14,6 @@ const options = {
 }
 
 const VerticalBar = forwardRef((props, ref) => {
-
   const [showGraph, setShowGraph] = React.useState(false);
   const [data, setData] = React.useState();
 

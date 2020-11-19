@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,13 +8,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import React,{useEffect,useRef,Fragment} from 'react';
 import _ from 'lodash';
-import DpiGraph from '../devices/DpiGraph'
-import FormFilter from './forms/FormFilter'
-
-import {usePagination,doDelete} from '../remote/RemoteData'
+import React, { Fragment, useRef } from 'react';
 import { FormContext } from '../context/FormContext';
+import DpiGraph from '../devices/DpiGraph';
+import FormFilter from './forms/FormFilter';
+import {usePaginationWithFilter} from './Data'
+
 
 const columns = [ 
   { id: 'client', label: 'Client', minWidth: 100}, 
@@ -63,34 +62,26 @@ export default function DeviceTable() {
   const [showGraph, setShowGraph] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [items,total,load] = usePagination('dpi/',page,rowsPerPage)
+  const [items,total,load] = usePaginationWithFilter('dpi/',page,rowsPerPage)
 
   const {filter, setFilter} = React.useContext(FormContext);
 
-   useEffect(() => {
-    console.log("*** filter ***  ",filter )
-  },[filter])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    load(newPage,rowsPerPage,filter)
+    load(newPage,rowsPerPage,filter,updateGraph)
   };
 
   const handleChangeRowsPerPage = (event) => {
-
-    console.log('handleChangeRowsPerPage',event.target.value)
     setRowsPerPage(+event.target.value);
     setPage(0);
-    load(0,+event.target.value,filter)
+    load(0,+event.target.value,filter,updateGraph)
   };
-
 
 
   const onUpdate = (e) => {     
     setPage(0);
-    load(0,rowsPerPage,filter)
-
-    console.log(' new filter',filter)
+    load(0,rowsPerPage,filter,updateGraph)
   };
 
 
@@ -99,42 +90,42 @@ export default function DeviceTable() {
     childRef.current.setShowGraph(!showGraph)
 
     if (!showGraph){
-      updateGraph()
+      childRef.current.updateData(getGraphData(items))
     }
 
   };
 
-  const getGraphData = () => {
+  const getGraphData = (items) => {
 
-    if (_.isEmpty(items)){
-      return {}
-    }
+      if (_.isEmpty(items)){
+        return {}
+      }
 
-    const labels =  items.reduce((acc,item) => {
-      acc.push(item.device)
-      return acc
-    },[])
+      const labels =  items.reduce((acc,item) => {
+        acc.push(item.device)
+        return acc
+      },[])
 
-    const data =  items.reduce((acc,item) => {
-      acc.push(item.dpi)
-      return acc
-    },[])
+      const data =  items.reduce((acc,item) => {
+        acc.push(item.dpi)
+        return acc
+      },[])
 
 
-    var response = {}
+      var response = {}
 
-    const label = 'DPI'
-    const borderWidth = 1
-    const backgroundColor =  'rgba(255, 99, 99, 150)'
+      const label = 'DPI'
+      const borderWidth = 1
+      const backgroundColor =  'rgba(255, 99, 99, 150)'
 
-    response.labels = labels
-    response.datasets = [{label,data,borderWidth,backgroundColor}]
+      response.labels = labels
+      response.datasets = [{label,data,borderWidth,backgroundColor}]
 
-    return response
+      return response
   }
 
-  const updateGraph = () => {
-    childRef.current.updateData(getGraphData())
+  const updateGraph = (items) => {
+      childRef.current.updateData(getGraphData(items))
   }
 
 
@@ -177,11 +168,10 @@ export default function DeviceTable() {
 
   const FormControls = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-        
+        <Button variant="outlined" color="primary" component="span"  onClick={onUpdate} style={{marginLeft:'5px'}}>  Update Table    </Button>     
           { showGraph ? 
             <Fragment>
             <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Hide Graph </Button>
-            <Button variant="contained" color="primary" component="span"  onClick={updateGraph} style={{marginLeft:'5px'}}> Update Graph </Button>
             </Fragment>
           :
           <Button  variant="contained"   color="primary"  component="span"  onClick={toogleGraph} style={{marginLeft:'15px'}}> Show Graph </Button>
@@ -192,7 +182,6 @@ export default function DeviceTable() {
 const FormFilters = () =>(
     <Paper   elevation={0}  className={classes.paper} >
       <FormFilter/>
-      <Button variant="outlined" color="primary" component="span"  onClick={onUpdate} style={{marginLeft:'5px'}}>    Update     </Button>     
     </Paper>
   )
 
@@ -226,4 +215,7 @@ const FormFilters = () =>(
     
   );
 }
+
+
+
 
