@@ -9,10 +9,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import _ from 'lodash';
-import React, { Fragment, useRef, useEffect } from 'react';
+import React, { Fragment, useRef } from 'react';
+import { FormContext } from '../context/FormContext';
 import DpiGraph from '../devices/DpiGraph';
-import { usePaginationWithFilter } from './Data';
 import FormFilter from './forms/FormFilter';
+import {usePaginationWithFilter} from './Data'
 
 
 const columns = [ 
@@ -53,7 +54,7 @@ const useStyles = makeStyles({
 });
 
 
-export default function DeviceTable(props) {
+export default function DeviceTable() {
   const classes = useStyles();
 
   const childRef = useRef();
@@ -63,15 +64,8 @@ export default function DeviceTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [items,total,load] = usePaginationWithFilter('dpi/',page,rowsPerPage)
 
+  const [filter, setFilter] = React.useState({});
 
-  const [filter, setFilter] = React.useState('');
-
-  const context = {setFilter}
-
-
-  useEffect(() => {
-    console.log(filter)
-  },[filter])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -135,6 +129,7 @@ export default function DeviceTable(props) {
   }
 
 
+
   const DeviceTableHead = ()=> ( 
     <TableHead>
       <TableRow>
@@ -184,16 +179,16 @@ export default function DeviceTable(props) {
     </Paper>
   )
 
-const FormFilters = (props) =>(
+const FormFilters = () =>(
     <Paper   elevation={0}  className={classes.paper} >
-      <FormFilter {...props} />
+      <FormFilter/>
     </Paper>
   )
 
 
   return (
     <Paper className={classes.root}>
-      <FormFilters context={context}  />
+      <FormFilters  />
       <TableContainer className={classes.container}>
         <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
           <DeviceTableHead/>
