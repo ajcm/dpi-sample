@@ -20,13 +20,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Forms(props) {
+export default function Forms(props) {
   const classes = useStyles();
-  const [filter, setFilter] = React.useState({});
 
   return (
     <div>
     
+        
+    <FormControl className={classes.formControl}>
+        <SelectClient  />
+      </FormControl>
+
+        
+      <FormControl className={classes.formControl}>
+        <SelectOffice  />
+      </FormControl>
+
       <FormControl className={classes.formControl}>
         <SelectSlider  />
       </FormControl>
@@ -39,24 +48,5 @@ function Forms(props) {
     </div>
   );
 }
-
-
-export default function SimpleSelect(props) {
-  const classes = useStyles();
-  const [filter, setFilter] = React.useState({});
-
-  useEffect(() => {
-    console.log(filter)
-  },[filter])
-
-  return (
-    <div>
-      <FormContext.Provider value={{filter,setFilter}}>
-        <Forms/>
-      </FormContext.Provider>  
-    </div>
-  );
-}
-
 
  

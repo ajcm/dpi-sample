@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import _ from 'lodash';
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef,useEffect} from 'react';
 import { FormContext } from '../context/FormContext';
 import DpiGraph from '../devices/DpiGraph';
 import FormFilter from './forms/FormFilter';
@@ -179,16 +179,27 @@ export default function DeviceTable() {
     </Paper>
   )
 
-const FormFilters = () =>(
-    <Paper   elevation={0}  className={classes.paper} >
-      <FormFilter/>
-    </Paper>
-  )
+const Filters = (props) => {
+    const classes = useStyles();
+    const [filter, setFilter] = React.useState({});
+  
+    useEffect(() => {
+      console.log(filter)
+    },[filter])
+  
+    return (
+      <div>
+        <FormContext.Provider value={{filter,setFilter}}>
+          <FormFilter/>
+        </FormContext.Provider>  
+      </div>
+    );
+  }
 
-
+  
   return (
     <Paper className={classes.root}>
-      <FormFilters  />
+      <Filters  />
       <TableContainer className={classes.container}>
         <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
           <DeviceTableHead/>
