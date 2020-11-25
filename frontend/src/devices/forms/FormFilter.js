@@ -22,14 +22,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Forms(props) {
   const classes = useStyles();
-
-  const [form,setForm] = useState({})
- // const {filter, setFilter} = React.useContext(FormContext);
-
-  // useEffect(() => {
-  //   setFilter({...form})
-  // },[form])
-
   const [filter, setFilter] = React.useState({});
 
   return (
@@ -51,12 +43,6 @@ function Forms(props) {
 
 export default function SimpleSelect(props) {
   const classes = useStyles();
-
-  //const [form,setForm] = useState({})
- // const {filter, setFilter} = React.useContext(FormContext);
-
-
-
   const [filter, setFilter] = React.useState({});
 
   useEffect(() => {
