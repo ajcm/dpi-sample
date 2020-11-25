@@ -18,14 +18,12 @@ export default function Dpi() {
   const classes = useStyles();
 
   const [filter, setFilter] = React.useState({'client':'-1'});
-  const [device,setDevice] = React.useState('');
-
 
 
   return (
     <React.Fragment>
       <Title>DPI</Title>
-      <FormContext.Provider value={{filter,setFilter,device,setDevice}}>
+      <FormContext.Provider value={{filter,setFilter}}>
       <DeviceTable/>
       </FormContext.Provider>
 

@@ -1,12 +1,13 @@
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import React from "react";
+import React, { Fragment, useEffect,useState } from "react";
 import { FormContext } from '../../context/FormContext';
 import SelectClient from './SelectClient';
 import SelectOffice from './SelectOffice';
 import SelectOrder from './SelectOrder';
 import SelectRange from './SelectRange';
 import SelectDevice from './SelectDevice';
+import SelectSlider from './SelectSlider';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -19,30 +20,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SimpleSelect() {
+export default function SimpleSelect(props) {
   const classes = useStyles();
-  const {filter, setFilter} = React.useContext(FormContext);
+
+  const [form,setForm] = useState({})
+
+  useEffect(() => {
+
+    console.log(form)
+
+  },[form])
+
 
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <SelectClient/>
+        <SelectSlider form={form} setForm={setForm} />
       </FormControl>
-
-      <FormControl className={classes.formControl}>
-        <SelectOffice/>
-      </FormControl>
-
-      <SelectRange/>
-
-      <FormControl className={classes.formControl}>
-        <SelectDevice/>
-      </FormControl>
-
   
-
       <FormControl className={classes.formControl}>
-        <SelectOrder/>
+        <SelectDevice  form={form} setForm={setForm} />
       </FormControl>
   
     </div>
