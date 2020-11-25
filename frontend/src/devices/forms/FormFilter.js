@@ -25,11 +25,9 @@ export default function Forms(props) {
 
   return (
     <div>
-    
-        
     <FormControl className={classes.formControl}>
         <SelectClient  />
-      </FormControl>
+    </FormControl>
 
         
       <FormControl className={classes.formControl}>
@@ -44,7 +42,9 @@ export default function Forms(props) {
         <SelectDevice   />
       </FormControl>
 
-  
+      <FormControl className={classes.formControl}>
+        <SelectOrder   />
+      </FormControl>
     </div>
   );
 }

@@ -67,12 +67,10 @@ export const usePaginationWithFilter = (url,page,size) => {
         params ['sort']  = 'dpi,ASC'
       }
   
-      if (!_.isEmpty(filter.from) && !_.isEqual(filter.from,"-1")){
-        params ['from']  = filter.from
+      if (!_.isEmpty(filter.range)){
+        params ['from']  = filter.range[0]
+        params ['to']  = filter.range[1]
       }
   
-      if (!_.isEmpty(filter.to) && !_.isEqual(filter.to,"-1")){
-        params ['to']  = filter.to
-      }
-  
+
   }

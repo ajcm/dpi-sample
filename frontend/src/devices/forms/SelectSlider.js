@@ -17,13 +17,17 @@ export default function RangeSlider({form,setForm}) {
   return (
     <Box sx={{ width: 300 }}>
       <Typography id="range-slider-demo" gutterBottom>
-        Temperature range {range}
+        DPI
       </Typography>
       <Slider
         value={range}
         onChange={handleChange}
         valueLabelDisplay="auto"
         aria-labelledby="range-slider-demo"
+        step={1}
+        marks
+        min={0}
+        max={10}
         
       />
     </Box>

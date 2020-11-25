@@ -66,6 +66,10 @@ export default function DeviceTable() {
 
   const [filter, setFilter] = React.useState({});
 
+  useEffect(() => {
+    console.log(filter)
+  },[filter])
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -179,27 +183,14 @@ export default function DeviceTable() {
     </Paper>
   )
 
-const Filters = (props) => {
-    const classes = useStyles();
-    const [filter, setFilter] = React.useState({});
-  
-    useEffect(() => {
-      console.log(filter)
-    },[filter])
-  
-    return (
-      <div>
-        <FormContext.Provider value={{filter,setFilter}}>
-          <FormFilter/>
-        </FormContext.Provider>  
-      </div>
-    );
-  }
 
   
+
+
   return (
+    <FormContext.Provider value={{filter,setFilter}}>
     <Paper className={classes.root}>
-      <Filters  />
+      <FormFilter  />
       <TableContainer className={classes.container}>
         <Table  size="small" stickyHeader aria-label="table" className={classes.table}>
           <DeviceTableHead/>
@@ -223,6 +214,7 @@ const Filters = (props) => {
       </Paper>
   
     </Paper>
+    </FormContext.Provider>  
     
   );
 }
